@@ -102,7 +102,7 @@ res.send(file.toString())
 // res.send(file.toString())
 
 let stringres = res.toString();
-res.send('writeFile route')
+res.send(req.body)
 
   });
 
