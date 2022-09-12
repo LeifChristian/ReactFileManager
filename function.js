@@ -90,18 +90,19 @@ res.send(file.toString())
 
   });
 
-
-  app.post('/writeFile', (req, res, next) => {
+app.post('/writeFile', (req, res, next) => {
     // console.log(req.query.fileName, 'req');
 
-    console.log(req.body);
+    console.log(req.body.file, " -file");
+    console.log(req.body.text, ' -text')
+
+    // let parsedText = JSON.parse(req.body.text);
+
+    fs.writeFileSync(path.resolve(__dirname, `./client/src/filesToParse/${req.body.file}`), req.body.text, {encoding:'utf8',flag:'w'})
 
 // let file = fs.readFileSync(path.resolve(__dirname, `./client/src/filesToParse/${req.query.fileName}`), 'utf8'); 
-// fileToConvertToText.ass
+// fileToConvertToText.js
 
-// res.send(file.toString())
-
-let stringres = res.toString();
 res.send(req.body)
 
   });

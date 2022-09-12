@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  margin-top: 14%;
+  margin-top: 10%;
   
 }
 
@@ -18,10 +18,7 @@ text-align: center;;
   text-align: center;
 }
 
-#editButtonModal {
 
-  margin-bottom: -2000px;
-}
 
 #modalButtons button {
 margin: 2px

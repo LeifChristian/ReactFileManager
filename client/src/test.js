@@ -34,41 +34,34 @@ const getFileInfo = async (fileName) => {
 const editFileInfo = async (fileName) => {   await axios.post(`/getFile?fileName=${fileName}`, 
 ).then((res) => {console.log(res.data); changeTextFromFile(res.data)}); setIsOpen(true);  console.log(fileName)}
 
-
 //
 
 const writeToFile = async (updatedText, theFileToUpdate) => {
 
-  console.log(updatedText, '... updated text' )
+  console.log(updatedText, ' -updated text' )
 
-  // await axios.post(`/writeFile?fileName=${fileName}`, 
-  // ).then((res) => {console.log(res.data); changeTextFromFile(res.data)});
-
-  const textObject = {stuff: updatedText}
-
-  const stringy = JSON.stringify(textObject)
-
-//   axios.post(
-//     `/writeFile?fileName=${theFileToUpdate}`, stringy,
-//     { 
-//         headers: { 
-//             'Content-Type' : 'application/json' 
-//         }
-//     }
-// ).then(response =>  console.log(response)
-// );
-
-
-axios
-.post(
-    "writeFile",
-    { general: "general", oneSuggestion: "oneSuggestion" }
-)
-.then((res) => console.log("success, dictionary sent,", res))
-.catch((err) => {
-    console.log(err.response);
+var axios = require('axios');
+var data = JSON.stringify({
+  "file": theFileToUpdate,
+  "text": updatedText,
 });
 
+var config = {
+  method: 'post',
+  url: 'http://localhost:5000/writeFile',
+  headers: { 
+    'Content-Type': 'application/json'
+  },
+  data : data
+};
+
+axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
+});
 
 
 
@@ -116,7 +109,7 @@ axios
        
        )}
 
-       <div>{textFromFile}</div>
+       <div style={{padding: "3rem"}}>{textFromFile}</div>
         
         
         </div>

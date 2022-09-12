@@ -6,7 +6,7 @@ import Test from './test';
 function App() {
   
   return (
-    <div className="App">React/Node Text Parser
+    <div className="App"><h2>React/Node Text Editor</h2>
 
     <Test></Test>
       {/* <header className="App-header">
