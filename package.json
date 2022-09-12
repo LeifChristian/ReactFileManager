@@ -1,0 +1,28 @@
+{
+  "name": "fileparser",
+  "version": "1.0.0",
+  "description": "parseFile",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "ok",
+    "server": "node function.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "installServer": "npm install",
+    "installClient": "npm install --prefix client",
+    "installAll": "concurrently \"npm run installServer\" \"npm run installClient\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^7.4.0",
+    "express": "^4.18.1",
+    "fs": "0.0.1-security",
+    "node-fetch": "^3.2.10",
+    "path": "^0.12.7",
+    "require": "^0.4.4",
+    "simple-text-parser": "^2.1.1",
+    "uuid": "^9.0.0"
+  }
+}
