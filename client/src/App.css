@@ -4,8 +4,31 @@
   
 }
 
+#modalText textarea {
+text-align: center;;
+  color: white;
+  background-color: black;
+  height: 200px;
+  width: 500px;
+  border-radius: 20px;
+}
+
+
+#modalButtons {
+  text-align: center;
+}
+
+#editButtonModal {
+
+  margin-bottom: -2000px;
+}
+
+#modalButtons button {
+margin: 2px
+}
+
 html {background-color: teal; font-weight: 600; font-size: 20px;}
 
-button{border-radius: 2em; background-color: black; color: gray}
+button{border-radius: .8em; background-color: black; color: lightgray}
 
 

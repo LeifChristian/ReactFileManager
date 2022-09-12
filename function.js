@@ -9,9 +9,21 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import express, { text } from 'express';
 
+import cors from 'cors';
+import bodyParser from 'body-parser'
+
+// let cors = require('cors');
+// let bodyParser = require('body-parser');
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(cors());
 
 
 let txt = '';
@@ -75,6 +87,22 @@ res.send(file.toString())
 
 
 
+
+  });
+
+
+  app.post('/writeFile', (req, res, next) => {
+    // console.log(req.query.fileName, 'req');
+
+    console.log(req.body);
+
+// let file = fs.readFileSync(path.resolve(__dirname, `./client/src/filesToParse/${req.query.fileName}`), 'utf8'); 
+// fileToConvertToText.ass
+
+// res.send(file.toString())
+
+let stringres = res.toString();
+res.send('writeFile route')
 
   });
 
