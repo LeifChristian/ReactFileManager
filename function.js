@@ -121,6 +121,46 @@ res.send(req.body)
    
   })
 
+
+  app.post('/deleteFile', (req,res,next) => {
+
+    console.log(req.body.fileToDelete, 'file to Delete')
+
+    console.log('rename route');
+    res.send('rename route response')
+
+    if(req.body.fileToDelete){
+      
+      // fs.rename( path.resolve(__dirname, `./client/src/filesToParse/${req.body.file}`), path.resolve(__dirname, `./client/src/filesToParse/${req.body.newFileName}`), (res)=>{console.log(res)})
+  
+      fs.unlink(path.resolve(__dirname, `./client/src/filesToParse/${req.body.fileToDelete}`), res => console.log(res))
+  
+    }
+
+   
+  })
+
+  app.post('/createFile', (req,res,next) => {
+
+    console.log(req.body.newCreatedFileName, " -new file name");
+    // console.log(req.body.file)
+
+    console.log('create file route');
+    // res.send('create file route response')
+
+    if(req.body.newCreatedFileName.length>0){
+      
+      // fs.rename( path.resolve(__dirname, `./client/src/filesToParse/${req.body.file}`), path.resolve(__dirname, `./client/src/filesToParse/${req.body.newFileName}`), (res)=>{console.log(res)})
+
+      fs.appendFile(path.resolve(__dirname, `./client/src/filesToParse/${req.body.newCreatedFileName}`), "new File", (res)=>{console.log(res)})
+
+      res.send(req.body.newCreatedFileName)
+
+  }
+
+   
+  })
+
 // Handles any requests that don't match the ones above
 app.get('*', (req,res) =>{
     res.sendFile(path.join(__dirname+'/client/src/'));

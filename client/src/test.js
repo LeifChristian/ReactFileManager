@@ -33,10 +33,10 @@ const getFileInfo = async (fileName) => {
 
 } 
 
-const editFileInfo = async (fileName) => {   await axios.post(`/getFile?fileName=${fileName}`, 
-).then((res) => {console.log(res.data); changeTextFromFile(res.data)}); setIsOpen(true);  console.log(fileName)}
-
-//
+const editFileInfo = async (fileName) => {   
+  await axios.post(`/getFile?fileName=${fileName}`, )
+    .then((res) => {console.log(res.data); 
+      changeTextFromFile(res.data)}); setIsOpen(true);  console.log(fileName)}
 
 const writeToFile = async (updatedText, theFileToUpdate) => {
 
@@ -98,6 +98,83 @@ const renameStuff = () => {
 
 }
 
+const deleteStuff = () => {
+
+  // console.log(currentFile);
+
+  {
+    
+    if(window.confirm(`DO you want to delete ${currentFile}?`)){
+    
+    // alert("yes")
+
+    var data = JSON.stringify({
+      "fileToDelete": currentFile,
+    });
+    
+    var config = {
+      method: 'post',
+      url: 'http://localhost:5000/deleteFile',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    
+    axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+    axios.get('/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
+
+    setIsOpen(false);
+    changeTextFromFile('')
+  
+  } 
+  
+  else{setIsOpen(false); return}}
+
+}
+
+const createFile = () => {
+
+  let newCreatedFileName = prompt('Please enter file name')
+
+  var data = JSON.stringify({
+
+    "newCreatedFileName": newCreatedFileName
+  });
+  
+  var config = {
+    method: 'post',
+    url: 'http://localhost:5000/createFile',
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    data : data
+  };
+  
+  axios(config)
+  .then(function (response) {
+    console.log(JSON.stringify(response.data));
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+// let temp = fileName;
+setFileName('');
+
+axios.get('/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
+
+
+
+}
+
     useEffect(() => {
       let  i=0;
         if(i===0){
@@ -123,11 +200,12 @@ const renameStuff = () => {
 
       <br></br>
 
-<div id = "modalButtons">   <button onClick={(e) => {setIsOpen(false); writeToFile(textFromFile, currentFile)}}>Save</button>
+      <div id = "modalButtons">   <button onClick={(e) => {setIsOpen(false); writeToFile(textFromFile, currentFile)}}>Save</button>
       
       <button onClick={() => setIsOpen(false)}>X</button>
         
       <button onClick={() => {renameStuff()}}>...</button>
+      <button onClick={() => {deleteStuff()}}>D</button>
       
       </div></div>
       
@@ -143,6 +221,7 @@ const renameStuff = () => {
        </div>
        
        )}
+       <div id="modalButtons"><button onClick={()=> {createFile()}}>+</button></div>
 
        <div style={{padding: "2rem", fontSize: '1rem', fontWeight: '300', lineHeight: '30px', marginLeft: '50px', marginRight: '50px'}}>
 
