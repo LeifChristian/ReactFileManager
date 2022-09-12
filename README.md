@@ -11,5 +11,8 @@ Subsequent commits will contain full read and write file privleges, either a rea
 Cheers!
 
 
-█░░ █▀▀ █ █▀▀   █▀▀ █░█ █▀█ █ █▀ ▀█▀ █ ▄▀█ █▄░█
-█▄▄ ██▄ █ █▀░   █▄▄ █▀█ █▀▄ █ ▄█ ░█░ █ █▀█ █░▀█
+█░░ █▀▀ █ █▀▀   
+█▄▄ ██▄ █ █▀░   
+
+█▀▀ █░█ █▀█ █ █▀ ▀█▀ █ ▄▀█ █▄░█
+█▄▄ █▀█ █▀▄ █ ▄█ ░█░ █ █▀█ █░▀█
