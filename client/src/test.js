@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
+import './App.css';
 
 const customStyles = {
   content: {
@@ -12,7 +13,7 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     backgroundColor: 'black',
-    borderRadius: '.6em'
+    borderRadius: '.6em',
   },
 };
 
@@ -97,21 +98,26 @@ axios(config)
       <button onClick={() => setIsOpen(false)}>X</button></div></div>
       
       </Modal>
-       { filesToParse.map((item, index) => 
+       { filesToParse.sort().map((item, index) => 
     
-       <div key={index}>
+       <div id="modalButtons" key={index}>
         
-        <button onClick={()=>{; setCurrentFile(item); getFileInfo(item)}}>{item}</button>
-        <button  onClick={()=> {setCurrentFile(item); editFileInfo(item)}}>...</button>
+        <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFileInfo(item)}}>{item}</button>
+        {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFileInfo(item)}}>...</button> */}
        
        </div>
        
        
        )}
 
-       <div style={{padding: "3rem"}}>{textFromFile}</div>
+       <div style={{padding: "2rem", fontSize: '1rem', fontWeight: '300', lineHeight: '30px', marginLeft: '50px', marginRight: '50px'}}>
+
+        {/* toggle truncate string:
         
+          {textFromFile}</div> */}
         
+        {textFromFile.toString().substring(0, 4000)}...</div>
+
         </div>
   )
 }
