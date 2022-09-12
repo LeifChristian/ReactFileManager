@@ -24,6 +24,8 @@ export default function Test() {
     const [fileName, setFileName] = useState('');
     const [modalIsOpen, setIsOpen] = useState(false);
 
+    const [trigger, setTrigger] = useState(false);
+
 
 const editFileInfo = async (fileName) => {   
   await axios.post(`http://54.215.36.230:5000/getFile?fileName=${fileName}`, )
@@ -81,12 +83,15 @@ const renameStuff = () => {
   axios(config)
   .then(function (response) {
     console.log(JSON.stringify(response.data));
+    setTrigger(prevState => !prevState)
   })
   .catch(function (error) {
     console.log(error);
   });
 
   setIsOpen(false)
+
+  // setTrigger(prevState => !prevState)
 
 }
 
@@ -124,15 +129,15 @@ const deleteStuff = () => {
     axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
 
     setIsOpen(false);
-    changeTextFromFile('')
+    setTrigger(prevState => !prevState)
   
   } 
   
-  else{setIsOpen(false); return}}
+  else{setIsOpen(false) ;return}}
 
 }
 
-const createFile = async () => {
+const createFile = () => {
 
   let newCreatedFileName = prompt('Please enter file name')
 
@@ -153,28 +158,30 @@ const createFile = async () => {
   axios(config)
   .then(function (response) {
     console.log(JSON.stringify(response.data));
+    setTrigger(prevState => !prevState)
   })
   .catch(function (error) {
     console.log(error);
   });
 
 // let temp = fileName;
-setFileName('');
+// setFileName('');
 
- axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
 
 
 }
 
     useEffect(() => {
-      let  i=0;
-        if(i===0){
-        console.log('useffect test')
-        axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
+    //   let  i=0;
+    //     if(i===0){
+    //     console.log('useffect test')
+    //     axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
     
-    i++}
+    // i++}
+
+    axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
        
-      }, [fileName])
+      }, [trigger])
 
   return (
 
@@ -191,12 +198,13 @@ setFileName('');
 
       <br></br>
 
-      <div id = "modalButtons">   <button onClick={(e) => {setIsOpen(false); writeToFile(textFromFile, currentFile)}}>Save</button>
-      
-      <button onClick={() => setIsOpen(false)}>X</button>
+      <div id = "modalButtons">   <button onClick={(e) => {setIsOpen(false); writeToFile(textFromFile, currentFile)}}>💾</button>
+      <button onClick={() => {deleteStuff()}}>☠️</button>
+  
         
-      <button onClick={() => {renameStuff()}}>...</button>
-      <button onClick={() => {deleteStuff()}}>D</button>
+      <button onClick={() => {renameStuff()}}>📋</button>
+      <button onClick={() => setIsOpen(false)}>🖖</button>
+     
       
       </div></div>
       
