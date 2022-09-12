@@ -24,17 +24,9 @@ export default function Test() {
     const [fileName, setFileName] = useState('');
     const [modalIsOpen, setIsOpen] = useState(false);
 
-const getFileInfo = async (fileName) => {
-
-    // axios.post('/getFile').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
-
-    await axios.post(`/getFile?fileName=${fileName}`, 
-      ).then((res) => {console.log(res.data); changeTextFromFile(res.data)});
-
-} 
 
 const editFileInfo = async (fileName) => {   
-  await axios.post(`/getFile?fileName=${fileName}`, )
+  await axios.post(`http://54.215.36.230:5000/getFile?fileName=${fileName}`, )
     .then((res) => {console.log(res.data); 
       changeTextFromFile(res.data)}); setIsOpen(true);  console.log(fileName)}
 
@@ -49,7 +41,7 @@ var data = JSON.stringify({
 
 var config = {
   method: 'post',
-  url: 'http://localhost:5000/writeFile',
+  url: 'http://54.215.36.230:5000/writeFile',
   headers: { 
     'Content-Type': 'application/json'
   },
@@ -79,7 +71,7 @@ const renameStuff = () => {
   
   var config = {
     method: 'post',
-    url: 'http://localhost:5000/renameFile',
+    url: 'http://54.215.36.230:5000/renameFile',
     headers: { 
       'Content-Type': 'application/json'
     },
@@ -114,7 +106,7 @@ const deleteStuff = () => {
     
     var config = {
       method: 'post',
-      url: 'http://localhost:5000/deleteFile',
+      url: 'http://54.215.36.230:5000/deleteFile',
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -129,7 +121,7 @@ const deleteStuff = () => {
       console.log(error);
     });
 
-    axios.get('/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
+    axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
 
     setIsOpen(false);
     changeTextFromFile('')
@@ -140,7 +132,7 @@ const deleteStuff = () => {
 
 }
 
-const createFile = () => {
+const createFile = async () => {
 
   let newCreatedFileName = prompt('Please enter file name')
 
@@ -151,7 +143,7 @@ const createFile = () => {
   
   var config = {
     method: 'post',
-    url: 'http://localhost:5000/createFile',
+    url: 'http://54.215.36.230:5000/createFile',
     headers: { 
       'Content-Type': 'application/json'
     },
@@ -169,8 +161,7 @@ const createFile = () => {
 // let temp = fileName;
 setFileName('');
 
-axios.get('/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
-
+ axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
 
 
 }
@@ -179,7 +170,7 @@ axios.get('/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeF
       let  i=0;
         if(i===0){
         console.log('useffect test')
-        axios.get('/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
+        axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
     
     i++}
        
