@@ -68,7 +68,7 @@ axios(config)
 
 const renameStuff = () => {
 
-  let enteredName = prompt('Please enter new FileName')
+  let enteredName = prompt('Please enter new file name')
 
   setFileName(enteredName);
 
