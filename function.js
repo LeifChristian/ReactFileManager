@@ -107,6 +107,20 @@ res.send(req.body)
 
   });
 
+  app.post('/renameFile', (req,res,next) => {
+
+    console.log(req.body.newFileName, " -file");
+    console.log(req.body.file)
+
+    console.log('rename route');
+    res.send('rename route response')
+
+    if(req.body.newFileName.length>0){fs.rename( path.resolve(__dirname, `./client/src/filesToParse/${req.body.file}`), path.resolve(__dirname, `./client/src/filesToParse/${req.body.newFileName}`), (res)=>{console.log(res)})
+  }
+
+   
+  })
+
 // Handles any requests that don't match the ones above
 app.get('*', (req,res) =>{
     res.sendFile(path.join(__dirname+'/client/src/'));
@@ -139,4 +153,4 @@ return (file.toString());
 
 }
 
-go('./test.txt')
+// go('./test.txt')

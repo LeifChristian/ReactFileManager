@@ -21,6 +21,7 @@ export default function Test() {
     const [filesToParse, changeFilesToParse] = useState([]);
     const [textFromFile, changeTextFromFile] = useState('');
     const [currentFile, setCurrentFile] = useState('')
+    const [fileName, setFileName] = useState('');
     const [modalIsOpen, setIsOpen] = useState(false);
 
 const getFileInfo = async (fileName) => {
@@ -41,7 +42,6 @@ const writeToFile = async (updatedText, theFileToUpdate) => {
 
   console.log(updatedText, ' -updated text' )
 
-var axios = require('axios');
 var data = JSON.stringify({
   "file": theFileToUpdate,
   "text": updatedText,
@@ -64,7 +64,37 @@ axios(config)
   console.log(error);
 });
 
+}
 
+const renameStuff = () => {
+
+  let enteredName = prompt('Please enter new FileName')
+
+  setFileName(enteredName);
+
+  var data = JSON.stringify({
+    "file": currentFile,
+    "newFileName": enteredName
+  });
+  
+  var config = {
+    method: 'post',
+    url: 'http://localhost:5000/renameFile',
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    data : data
+  };
+  
+  axios(config)
+  .then(function (response) {
+    console.log(JSON.stringify(response.data));
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+  setIsOpen(false)
 
 }
 
@@ -76,7 +106,7 @@ axios(config)
     
     i++}
        
-      }, [])
+      }, [fileName])
 
   return (
 
@@ -95,9 +125,14 @@ axios(config)
 
 <div id = "modalButtons">   <button onClick={(e) => {setIsOpen(false); writeToFile(textFromFile, currentFile)}}>Save</button>
       
-      <button onClick={() => setIsOpen(false)}>X</button></div></div>
+      <button onClick={() => setIsOpen(false)}>X</button>
+        
+      <button onClick={() => {renameStuff()}}>...</button>
+      
+      </div></div>
       
       </Modal>
+      
        { filesToParse.sort().map((item, index) => 
     
        <div id="modalButtons" key={index}>
@@ -107,7 +142,6 @@ axios(config)
        
        </div>
        
-       
        )}
 
        <div style={{padding: "2rem", fontSize: '1rem', fontWeight: '300', lineHeight: '30px', marginLeft: '50px', marginRight: '50px'}}>
@@ -116,7 +150,10 @@ axios(config)
         
           {textFromFile}</div> */}
         
-        {textFromFile.toString().substring(0, 4000)}...</div>
+       {textFromFile.length > 5000 ?  textFromFile.toString().substring(0, 5000) + "...": textFromFile}
+        
+        
+        </div>
 
         </div>
   )
