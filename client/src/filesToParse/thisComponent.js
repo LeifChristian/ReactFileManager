@@ -28,7 +28,7 @@ export default function Test() {
 
 
 const editFileInfo = async (fileName) => {   
-  await axios.post(`/getFile?fileName=${fileName}`, )
+  await axios.post(`http://54.215.36.230:5000/getFile?fileName=${fileName}`, )
     .then((res) => {console.log(res.data); 
       changeTextFromFile(res.data)}); setIsOpen(true);  console.log(fileName)}
 // console.log(REACT_APP_MY_ENV, 'env')
@@ -43,7 +43,7 @@ var data = JSON.stringify({
 
 var config = {
   method: 'post',
-  url: '/writeFile',
+  url: 'http://54.215.36.230:5000/writeFile',
   headers: { 
     'Content-Type': 'application/json'
   },
@@ -73,7 +73,7 @@ const renameStuff = () => {
   
   var config = {
     method: 'post',
-    url: '/renameFile',
+    url: 'http://54.215.36.230:5000/renameFile',
     headers: { 
       'Content-Type': 'application/json'
     },
@@ -109,7 +109,7 @@ const deleteStuff = () => {
     
     var config = {
       method: 'post',
-      url: '/deleteFile',
+      url: 'http://54.215.36.230:5000/deleteFile',
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -124,7 +124,7 @@ const deleteStuff = () => {
       console.log(error);
     });
 
-    axios.get('/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
+    axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
 
     setIsOpen(false);
     setTrigger(prevState => !prevState)
@@ -146,7 +146,7 @@ const createFile = () => {
   
   var config = {
     method: 'post',
-    url: '/createFile',
+    url: 'http://54.215.36.230:5000/createFile',
     headers: { 
       'Content-Type': 'application/json'
     },
@@ -183,7 +183,7 @@ const createFile = () => {
     
     // i++}
 
-    axios.get('/getFiles').then((res) =>{ console.log(res.data, " --axios response"); changeFilesToParse(res.data)})
+    axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, " --axios response"); changeFilesToParse(res.data)})
        
       }, [trigger])
 

@@ -1,0 +1,27 @@
+https://www.w3schools.com/nodejs/nodejs_filesystem.asp
+https://www.npmjs.com/package/react-modal
+https://stackoverflow.com/questions/47366379/save-textarea-value-to-div-with-reactjs
+
+https://bobbyhadz.com/blog/react-get-textarea-value
+
+https://www.positronx.io/react-axios-tutorial-make-http-get-post-requests/
+^^above shows cors and body-parser packages needed to parse body of request
+
+https://stackoverflow.com/posts/43893004/revisions - fs stuff
+https://stackoverflow.com/questions/59456181/sorting-alphabetically-in-reactjs
+https://futurestud.io/tutorials/limit-and-truncate-a-string-to-a-given-length-in-javascript-and-node-js - substring limit
+https://www.geeksforgeeks.org/node-js-fs-rename-method/
+https://stackoverflow.com/questions/54993218/reactjs-using-alert-to-take-input-from-user
+https://www.tutorialkart.com/nodejs/create-file-in-nodejs-using-node-fs-module/
+https://stackoverflow.com/questions/52034868/confirm-window-in-react
+https://stackoverflow.com/questions/5315138/node-js-remove-file
+https://stackoverflow.com/questions/40714583/how-to-specify-a-port-to-run-a-create-react-app-based-project
+
+https://stackoverflow.com/questions/42640636/react-must-be-in-scope-when-using-jsx-react-react-in-jsx-scope
+https://emojipedia.org/gestures/ - for icons
+
+https://stackoverflow.com/questions/62723863/css-overflow-wrap-does-not-work-in-react-js - word wrap
+
+https://www.positronx.io/react-axios-tutorial-make-http-get-post-requests/
+
+https://adostes.medium.com/using-environment-variables-in-a-react-application-ac3b6c307373

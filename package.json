@@ -2,7 +2,7 @@
   "name": "fileparser",
   "version": "1.0.0",
   "description": "parseFile",
-  "main": "index.js",
+
   "type": "module",
   "scripts": {
     "test": "ok",
