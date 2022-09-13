@@ -14,7 +14,7 @@ create a file named ".env" in the client directory.
 
 add the following variable: REACT_APP_MY_ENV="whateverPasswordYouChoose".
 
-This is just a very simple hard-coded password protection, useful for remote deployment.
+This is a simple hard-coded password protection, useful for remote deployment.
 
 TO RUN: 
 
