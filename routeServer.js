@@ -25,7 +25,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cors());
 
-
 let txt = '';
 // Serve the static files from the React app
 app.use(express.static(path.join(__dirname, 'client/src/')));
@@ -36,17 +35,6 @@ app.get('/getFiles', (req, res) => {
     var list = ["item1", "item2", "item3"];
     //  res.json(list);
     console.log('Sent list of items');
-
-// fs.readdir(process.cwd(), function (err, files) {
-//     if (err) {
-//       console.log(err);
-//       return;
-//     }
-//     console.log(files);
-//   });
-
-//above root dir working
-
   
 fs.readdir('./client/src/filesToParse', function (err, files) {
     if (err) {
@@ -55,7 +43,40 @@ fs.readdir('./client/src/filesToParse', function (err, files) {
     }
     console.log(files);
 
-    res.json(files);
+    console.log(typeof(files))
+
+
+    let myArray = [...Object.values(files)];
+
+    let filesAndTimes = [];
+    console.log(myArray);
+    console.log(myArray[0])
+
+    myArray.forEach((file, index) => {
+
+      
+    let { birthtime } = fs.statSync(`./client/src/filesToParse/${myArray[index]}`,)
+
+      // console.log("Name:", file, "Created:", birthtime)
+
+      let thingy = Date.parse(birthtime);
+      console.log(thingy, 'thingy')
+
+      let theObject = {
+
+        Name: file,
+
+        Created: thingy
+
+      };
+
+      filesAndTimes.push(theObject)
+    
+    })
+
+    console.log(filesAndTimes)
+
+    res.json(filesAndTimes);
   });
 
 //
@@ -76,16 +97,12 @@ app.post('/getFile', (req, res, next) => {
 
     // console.log(textFromFile, 'aa');
 
-
-
 let file = fs.readFileSync(path.resolve(__dirname, `./client/src/filesToParse/${req.query.fileName}`), 'utf8'); 
 // fileToConvertToText.ass
 
 res.send(file.toString())
 
 // return (file.toString());
-
-
 
 
   });
@@ -143,6 +160,7 @@ res.send(req.body)
   app.post('/createFile', (req,res,next) => {
 
     console.log(req.body.newCreatedFileName, " -new file name");
+    console.log(req.body.test, ' -created date')
     // console.log(req.body.file)
 
     console.log('create file route');
