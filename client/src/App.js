@@ -1,7 +1,7 @@
 
 import './App.css';
 import Test from './test';
-// import React, { Component }  from 'react'; ==> this line was necessary for AWS deploy
+// import React, { Component }  from 'react'; ==> this line was needed for AWS deploy
 
 function App() {
   
