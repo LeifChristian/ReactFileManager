@@ -248,7 +248,7 @@ const createFile = () => {
 
 {sortABC ? 
       
-       fullFileObject?.sort((a,b) => b.Name.localeCompare(a.Bame)).map((item, index) => 
+       fullFileObject?.sort((a,b) => a.Name.localeCompare(b.Name)).map((item, index) => 
     
        <div id="modalButtons" key={index}>
         
