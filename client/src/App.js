@@ -1,7 +1,7 @@
 
 import './App.css';
 import Test from './test';
-// import fetch from 'node-fetch';
+// import React, { Component }  from 'react'; ==> this line was necessary for AWS deploy
 
 function App() {
   
