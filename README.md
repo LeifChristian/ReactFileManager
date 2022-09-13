@@ -8,6 +8,14 @@ a list of all files will be displayed. Clicking on a file will show the text of 
 
 Subsequent commits will contain full read and write file privleges, either for a react/node file manager or, a simple text editor.
 
+FIRST:
+
+create a file named ".env" in the client directory.
+
+add the following variable: REACT_APP_MY_ENV="whateverPasswordYouChoose".
+
+This is just a very simple hard-coded password protection, useful for remote deployment.
+
 TO RUN: 
 
 1) npm install in root directory
