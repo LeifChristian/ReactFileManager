@@ -1,7 +1,7 @@
 
 Who said React can't access a computer's file system? With Node/Express it can!
 
-# This is a simple React File Manager/Text Editor with CRUD functionality. 
+#Simple React File Manager/Text Editor with CRUD functionality. 
 
 Files parsed come from the directory: client/src/filesToParse
 
@@ -25,11 +25,12 @@ add the following variable: REACT_APP_MY_ENV="whateverPasswordYouChoose".
 
 This is a simple hard-coded password protection, useful for remote deployment.
  
-# Use "remoteBranch" for remote deployment. in file client/src/text.js, 
- 
-# replace the server ip address with your own server ip in all axios requests:    
+# Use "remoteBranch" for remote deployment. 
 
-#   axios("http://myVeryOwnServer:5000/createFile", ...)
+!!!For remote deployment!!! 
+
+In client/src/text.js, replace the server ip address with your own server ip in ALL axios requests:    
+axios("http://myVeryOwnServer:5000/createFile/", ...)
 
 TO RUN: 
 
