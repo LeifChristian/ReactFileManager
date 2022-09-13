@@ -20,16 +20,19 @@ const customStyles = {
 export default function Test() {
   const { REACT_APP_MY_ENV } = process.env;
     const [filesToParse, changeFilesToParse] = useState([]);
+    const [fullFileObject, changeFullFileObject] = useState([]);
     const [textFromFile, changeTextFromFile] = useState('');
     const [currentFile, setCurrentFile] = useState('')
     const [fileName, setFileName] = useState('');
     const [modalIsOpen, setIsOpen] = useState(false);
     const [trigger, setTrigger] = useState(false);
-
+    const [sortABC, setSortABC] = useState(false);
+    const [fileDate, setFileDate] = useState('')
 
 const editFileInfo = async (fileName) => {   
-  await axios.post(`http://...215.36.230:5000/getFile?fileName=${fileName}`, )
+  await axios.post(`/getFile?fileName=${fileName}`, )
     .then((res) => {console.log(res.data); 
+      
       changeTextFromFile(res.data)}); setIsOpen(true);  console.log(fileName)}
 // console.log(REACT_APP_MY_ENV, 'env')
 const writeToFile = async (updatedText, theFileToUpdate) => {
@@ -43,7 +46,7 @@ var data = JSON.stringify({
 
 var config = {
   method: 'post',
-  url: 'http://...215.36.230:5000/writeFile',
+  url: '/writeFile',
   headers: { 
     'Content-Type': 'application/json'
   },
@@ -73,7 +76,7 @@ const renameStuff = () => {
   
   var config = {
     method: 'post',
-    url: 'http://...215.36.230:5000/renameFile',
+    url: '/renameFile',
     headers: { 
       'Content-Type': 'application/json'
     },
@@ -109,7 +112,7 @@ const deleteStuff = () => {
     
     var config = {
       method: 'post',
-      url: 'http://...215.36.230:5000/deleteFile',
+      url: '/deleteFile',
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -124,7 +127,25 @@ const deleteStuff = () => {
       console.log(error);
     });
 
-    axios.get('http://...215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
+    axios.get('/getFiles').then((res) =>{ console.log(res.data, "reactres"); 
+    
+    const myArray = [...Object.values(res.data)];
+
+    console.log(myArray[0].Name);
+    const otherArray = []
+
+    for( let i in myArray){
+      otherArray.push(myArray[i].Name);
+    }
+  console.log(otherArray)
+
+    changeFullFileObject(myArray)
+    changeFilesToParse(otherArray)
+    
+    // changeFilesToParse(res.data)
+  
+  
+  })
 
     setIsOpen(false);
     setTrigger(prevState => !prevState)
@@ -137,16 +158,23 @@ const deleteStuff = () => {
 
 const createFile = () => {
 
+  const current = new Date();
+  let date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+
+  let dateString = current.toString();
+
+
   let newCreatedFileName = prompt('Please enter file name')
 
   var data = JSON.stringify({
 
-    "newCreatedFileName": newCreatedFileName
+    "newCreatedFileName": newCreatedFileName,
+    "test": dateString
   });
   
   var config = {
     method: 'post',
-    url: 'http://...215.36.230:5000/createFile',
+    url: '/createFile',
     headers: { 
       'Content-Type': 'application/json'
     },
@@ -162,11 +190,6 @@ const createFile = () => {
     console.log(error);
   });
 
-// let temp = fileName;
-// setFileName('');
-
-
-
 }
 
     useEffect(() => {
@@ -174,16 +197,26 @@ const createFile = () => {
     let password = prompt('Please enter password'); 
   
     if(password!==REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
-  
-      
-    //   let  i=0;
-    //     if(i===0){
-    //     console.log('useffect test')
-    //     axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
-    
-    // i++}
 
-    axios.get('http://...215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, " --axios response"); changeFilesToParse(res.data)})
+    axios.get('/getFiles').then((res) =>{ 
+      // console.log(res.data, " --axios response"); 
+    // console.log(typeof(res.data))
+  
+
+    const myArray = [...Object.values(res.data)];
+     changeFullFileObject(myArray);
+    //  console.log(fullFileObject, 'fyullsy')
+
+     console.log(myArray);
+    const otherArray = []
+
+    for( let i in myArray){
+      otherArray.push(myArray[i].Name);
+    }
+
+  console.log(otherArray)
+
+    changeFilesToParse(otherArray)})
        
       }, [trigger])
 
@@ -209,20 +242,41 @@ const createFile = () => {
       </div></div>
       
       </Modal>
+
+      {sortABC ? <button style={{color: 'lightblue', fontStyle:'italic'}} onClick={()=> {setSortABC(prevState=>!prevState)}}>A-Z</button> : 
+      <button style={{color: 'lightblue', fontStyle:'italic'}} onClick={()=> {setSortABC(prevState=>!prevState)}}>MM/DD</button>  }
+
+{sortABC ? 
       
-       { filesToParse.sort().map((item, index) => 
+       fullFileObject?.sort((a,b) => b.Name.localeCompare(a.Name)).map((item, index) => 
     
        <div id="modalButtons" key={index}>
         
-        <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFileInfo(item)}}>{item}</button>
+        <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFileInfo(item)}}>{item.Name}</button>
         {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFileInfo(item)}}>...</button> */}
        
        </div>
        
-       )}
-       <div id="modalButtons"><button onClick={()=> {createFile()}}>+</button></div>
+       )
 
-       <div style={{padding: "2rem", fontSize: '1rem', fontWeight: '300', lineHeight: '30px', marginLeft: '5vw', marginRight: '5vw', whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>
+       :  fullFileObject?.sort((a,b) => b.Created - a.Created).map((item, index) => 
+    
+    <div id="modalButtons" key={index}>
+     
+     <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFileInfo(item)}}>{item.Name}{/* {item.Created}*/}</button>
+     {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFileInfo(item)}}>...</button> */}
+    
+    </div>
+    
+    )}
+
+
+
+
+
+       <div id="modalButtons"><button onClick={()=> {createFile();}}>+</button></div>
+
+       <div style={{padding: "2rem", fontSize: '1rem', fontWeight: '300', lineHeight: '30px', marginLeft: '2vw', marginRight: '2vw', whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>
 
         {/* toggle truncate string:
         
