@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import './App.css';
 
+let i=0;
+
 const customStyles = {
   content: {
     top: '50%',
@@ -18,6 +20,7 @@ const customStyles = {
 };
 
 export default function Test() {
+  const { REACT_APP_MY_ENV } = process.env;
     const [filesToParse, changeFilesToParse] = useState([]);
     const [textFromFile, changeTextFromFile] = useState('');
     const [currentFile, setCurrentFile] = useState('')
@@ -30,7 +33,7 @@ const editFileInfo = async (fileName) => {
   await axios.post(`http://54.215.36.230:5000/getFile?fileName=${fileName}`, )
     .then((res) => {console.log(res.data); 
       changeTextFromFile(res.data)}); setIsOpen(true);  console.log(fileName)}
-
+// console.log(REACT_APP_MY_ENV, 'env')
 const writeToFile = async (updatedText, theFileToUpdate) => {
 
   console.log(updatedText, ' -updated text' )
@@ -98,8 +101,6 @@ const deleteStuff = () => {
 
   // console.log(currentFile);
 
-  {
-    
     if(window.confirm(`Do you want to delete ${currentFile}?`)){
     
     // alert("yes")
@@ -132,7 +133,7 @@ const deleteStuff = () => {
   
   } 
   
-  else{setIsOpen(false) ;return}}
+  else{setIsOpen(false);return}
 
 }
 
@@ -171,6 +172,12 @@ const createFile = () => {
 }
 
     useEffect(() => {
+
+    let password = prompt('Please enter password'); 
+  
+    if(password!==REACT_APP_MY_ENV){i++; setTrigger(prevState=> !prevState); return;}
+  
+      
     //   let  i=0;
     //     if(i===0){
     //     console.log('useffect test')
@@ -199,12 +206,8 @@ const createFile = () => {
 
       <div id = "modalButtons">   <button onClick={(e) => {setIsOpen(false); writeToFile(textFromFile, currentFile)}}>💾</button>
       <button onClick={() => {deleteStuff()}}>☠️</button>
-  
-        
       <button onClick={() => {renameStuff()}}>📋</button>
       <button onClick={() => setIsOpen(false)}>🖖</button>
-     
-      
       </div></div>
       
       </Modal>
@@ -221,7 +224,7 @@ const createFile = () => {
        )}
        <div id="modalButtons"><button onClick={()=> {createFile()}}>+</button></div>
 
-       <div style={{padding: "2rem", fontSize: '1rem', fontWeight: '300', lineHeight: '30px', marginLeft: '20vw', marginRight: '20vw', wordWrap: 12}}>
+       <div style={{padding: "2rem", fontSize: '1rem', fontWeight: '300', lineHeight: '30px', marginLeft: '5vw', marginRight: '5vw', whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>
 
         {/* toggle truncate string:
         
