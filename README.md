@@ -1,7 +1,7 @@
 
 Who said React can't access a computer's file system? With Node/Express it can!
 
-#Simple React File Manager/Text Editor with CRUD functionality. 
+# Simple React File Manager/Text Editor with CRUD functionality. 
 
 Files parsed come from the directory: client/src/filesToParse
 
