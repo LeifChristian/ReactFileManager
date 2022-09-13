@@ -3,8 +3,6 @@ Who said React can't access a computer's file system? With Node/Express it can!
 
 # React File Manager/Text Editor
 
-**React Text Editor/File Manager**
-
 Create, Read, Update and Delete files with React and Express.
 
 Files parsed come from the directory: client/src/filesToParse
