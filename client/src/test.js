@@ -30,7 +30,7 @@ export default function Test() {
     const [fileDate, setFileDate] = useState('')
 
 const editFileInfo = async (fileName) => {   
-  await axios.post(`/getFile?fileName=${fileName}`, )
+  await axios.post(`http://yourServerHere:3006/getFile?fileName=${fileName}`, )
     .then((res) => {console.log(res.data); 
       
       changeTextFromFile(res.data)}); setIsOpen(true);  console.log(fileName)}
@@ -46,7 +46,7 @@ var data = JSON.stringify({
 
 var config = {
   method: 'post',
-  url: '/writeFile',
+  url: 'http://yourServerHere/writeFile',
   headers: { 
     'Content-Type': 'application/json'
   },
@@ -112,7 +112,7 @@ const deleteStuff = () => {
     
     var config = {
       method: 'post',
-      url: '/deleteFile',
+      url: 'http://yourServerHere/deleteFile',
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -127,7 +127,7 @@ const deleteStuff = () => {
       console.log(error);
     });
 
-    axios.get('/getFiles').then((res) =>{ console.log(res.data, "reactres"); 
+    axios.get('http://yourServerHere/getFiles').then((res) =>{ console.log(res.data, "reactres"); 
     
     const myArray = [...Object.values(res.data)];
 
@@ -174,7 +174,7 @@ const createFile = () => {
   
   var config = {
     method: 'post',
-    url: '/createFile',
+    url: 'http://yourServerHere/createFile',
     headers: { 
       'Content-Type': 'application/json'
     },
@@ -198,7 +198,7 @@ const createFile = () => {
   
     if(password!==REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
 
-    axios.get('/getFiles').then((res) =>{ 
+    axios.get('http://yourServerHere/getFiles').then((res) =>{ 
       // console.log(res.data, " --axios response"); 
     // console.log(typeof(res.data))
   
