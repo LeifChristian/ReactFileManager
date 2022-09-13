@@ -1,7 +1,9 @@
 
 Who said React can't access a computer's file system? With Node/Express it can!
 
-# This is a simple React File Manager/Text Editor with CRUD functionality. 
+# Simple React File Manager/Text Editor with CRUD functionality. 
+
+This is basically a React Text editor/file manager.
 
 Files parsed come from the directory: client/src/filesToParse
 
@@ -9,11 +11,11 @@ A list of all files in the directory is displayed.
 
 Clicking on a file will open an editor where you can:
 
- 1. edit the text of a file. 
- 2. rename a file
- 3. delete a file
+ 1. Edit the text of a file. 
+ 2. Rename a file
+ 3. Delete a file
 
- the + button creates a new file.
+ The + button creates a new file.
  
  That's pretty much it! 
 
