@@ -1,5 +1,5 @@
 
-Who said React can't access a computer's file system? With Node/Express it can!
+Who said React can't access a computer's file system? With Node/Express it can.
 
 # React File Manager/Text Editor
 
