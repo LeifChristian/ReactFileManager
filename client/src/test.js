@@ -221,7 +221,7 @@ const createFile = () => {
        )}
        <div id="modalButtons"><button onClick={()=> {createFile()}}>+</button></div>
 
-       <div style={{padding: "2rem", fontSize: '1rem', fontWeight: '300', lineHeight: '30px', marginLeft: '50px', marginRight: '50px'}}>
+       <div style={{padding: "2rem", fontSize: '1rem', fontWeight: '300', lineHeight: '30px', marginLeft: '20vw', marginRight: '20vw', wordWrap: 12}}>
 
         {/* toggle truncate string:
         
