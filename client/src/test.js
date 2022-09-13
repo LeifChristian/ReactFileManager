@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import './App.css';
 
-let i=0;
-
 const customStyles = {
   content: {
     top: '50%',
@@ -175,7 +173,7 @@ const createFile = () => {
 
     let password = prompt('Please enter password'); 
   
-    if(password!==REACT_APP_MY_ENV){i++; setTrigger(prevState=> !prevState); return;}
+    if(password!==REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
   
       
     //   let  i=0;
@@ -204,10 +202,10 @@ const createFile = () => {
 
       <br></br>
 
-      <div id = "modalButtons">   <button onClick={(e) => {setIsOpen(false); writeToFile(textFromFile, currentFile)}}>💾</button>
-      <button onClick={() => {deleteStuff()}}>☠️</button>
-      <button onClick={() => {renameStuff()}}>📋</button>
-      <button onClick={() => setIsOpen(false)}>🖖</button>
+      <div id = "modalButtons">   <button onClick={(e) => {setIsOpen(false); writeToFile(textFromFile, currentFile)}}> <span role="img" aria-label="save">💾</span> </button>
+      <button onClick={() => {deleteStuff()}}> <span role="img" aria-label="delete">☠️</span>  </button>
+      <button onClick={() => {renameStuff()}}> <span role="img" aria-label="rename">📋</span> </button>
+      <button onClick={() => setIsOpen(false)}> <span role="img" aria-label="cancel">🖖</span></button>
       </div></div>
       
       </Modal>
