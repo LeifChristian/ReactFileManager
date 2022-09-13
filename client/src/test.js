@@ -23,7 +23,6 @@ export default function Test() {
     const [currentFile, setCurrentFile] = useState('')
     const [fileName, setFileName] = useState('');
     const [modalIsOpen, setIsOpen] = useState(false);
-
     const [trigger, setTrigger] = useState(false);
 
 
@@ -101,7 +100,7 @@ const deleteStuff = () => {
 
   {
     
-    if(window.confirm(`DO you want to delete ${currentFile}?`)){
+    if(window.confirm(`Do you want to delete ${currentFile}?`)){
     
     // alert("yes")
 
@@ -179,7 +178,7 @@ const createFile = () => {
     
     // i++}
 
-    axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); changeFilesToParse(res.data)})
+    axios.get('http://54.215.36.230:5000/getFiles').then((res) =>{ console.log(res.data, " --axios response"); changeFilesToParse(res.data)})
        
       }, [trigger])
 
