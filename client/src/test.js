@@ -102,7 +102,7 @@ const deleteStuff = () => {
 
   // console.log(currentFile);
 
-    if(window.confirm(`Do you want to delete ${currentFile}?`)){
+    if(window.confirm(`Do you want to delete ${currentFile.Name}?`)){
     
     // alert("yes")
 
