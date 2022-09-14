@@ -30,9 +30,11 @@ export default function Test() {
     const [fileDate, setFileDate] = useState('')
     const [passwordEntered, setPasswordEntered] = useState(false);
 
+    const serverName = "http://yourServerNameHere"
+
 const editFileInfo = async (fileName) => {   
 
-  await axios.post(`http://yourServerHere:5000/getFile?fileName=${fileName.Name}`, )
+  await axios.post(`${serverName}/getFile?fileName=${fileName.Name}`, )
     .then((res) => {console.log(res.data); 
       
       changeTextFromFile(res.data)}); setIsOpen(true);  console.log(fileName)}
@@ -49,7 +51,7 @@ var data = JSON.stringify({
 
 var config = {
   method: 'post',
-  url: 'http://yourServerHere:5000/writeFile',
+  url: `${serverName}/writeFile`,
   headers: { 
     'Content-Type': 'application/json'
   },
@@ -73,13 +75,13 @@ const renameStuff = () => {
   setFileName(enteredName);
 
   var data = JSON.stringify({
-    "file": currentFile,
+    "file": currentFile.Name,
     "newFileName": enteredName
   });
   
   var config = {
     method: 'post',
-    url: '/renameFile',
+    url: `${serverName}/renameFile`,
     headers: { 
       'Content-Type': 'application/json'
     },
@@ -115,7 +117,7 @@ const deleteStuff = () => {
     
     var config = {
       method: 'post',
-      url: 'http://yourServerHere:5000/deleteFile',
+      url: `${serverName}/deleteFile`,
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -130,7 +132,7 @@ const deleteStuff = () => {
       console.log(error);
     });
 
-    axios.get('http://yourServerHere:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); 
+    axios.get(`${serverName}/getFiles`).then((res) =>{ console.log(res.data, "reactres"); 
     
     const myArray = [...Object.values(res.data)];
 
@@ -177,7 +179,7 @@ const createFile = () => {
   
   var config = {
     method: 'post',
-    url: 'http://yourServerHere:5000/createFile',
+    url: `${serverName}/createFile`,
     headers: { 
       'Content-Type': 'application/json'
     },
@@ -207,7 +209,7 @@ const createFile = () => {
 
       }
 
-    axios.get('http://yourServerHere:5000/getFiles').then((res) =>{ 
+    axios.get(`${serverName}/getFiles`).then((res) =>{ 
       // console.log(res.data, " --axios response"); 
     // console.log(typeof(res.data))
   
@@ -216,14 +218,14 @@ const createFile = () => {
      changeFullFileObject(myArray);
     //  console.log(fullFileObject, 'fyullsy')
 
-     console.log(myArray);
+     console.log(myArray, "array from response");
     const otherArray = []
 
     for( let i in myArray){
       otherArray.push(myArray[i].Name);
     }
 
-  console.log(otherArray)
+  console.log(otherArray, " array of file names")
 
     changeFilesToParse(otherArray)})
        
