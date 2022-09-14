@@ -28,9 +28,11 @@ export default function Test() {
     const [trigger, setTrigger] = useState(false);
     const [sortABC, setSortABC] = useState(false);
     const [fileDate, setFileDate] = useState('')
+    const [passwordEntered, setPasswordEntered] = useState(false);
 
 const editFileInfo = async (fileName) => {   
-  await axios.post(`http://yourServerHere:3006/getFile?fileName=${fileName.Name}`, )
+
+  await axios.post(`http://yourServerHere:5000/getFile?fileName=${fileName.Name}`, )
     .then((res) => {console.log(res.data); 
       
       changeTextFromFile(res.data)}); setIsOpen(true);  console.log(fileName)}
@@ -38,15 +40,16 @@ const editFileInfo = async (fileName) => {
 const writeToFile = async (updatedText, theFileToUpdate) => {
 
   console.log(updatedText, ' -updated text' )
+  console.log(theFileToUpdate, ' -file object')
 
 var data = JSON.stringify({
-  "file": theFileToUpdate,
+  "file": theFileToUpdate.Name,
   "text": updatedText,
 });
 
 var config = {
   method: 'post',
-  url: 'http://yourServerHere/writeFile',
+  url: 'http://yourServerHere:5000/writeFile',
   headers: { 
     'Content-Type': 'application/json'
   },
@@ -55,7 +58,7 @@ var config = {
 
 axios(config)
 .then(function (response) {
-  console.log(JSON.stringify(response.data));
+  console.log(response.data);
 })
 .catch(function (error) {
   console.log(error);
@@ -107,12 +110,12 @@ const deleteStuff = () => {
     // alert("yes")
 
     var data = JSON.stringify({
-      "fileToDelete": currentFile,
+      "fileToDelete": currentFile.Name,
     });
     
     var config = {
       method: 'post',
-      url: 'http://yourServerHere/deleteFile',
+      url: 'http://yourServerHere:5000/deleteFile',
       headers: { 
         'Content-Type': 'application/json'
       },
@@ -127,7 +130,7 @@ const deleteStuff = () => {
       console.log(error);
     });
 
-    axios.get('http://yourServerHere/getFiles').then((res) =>{ console.log(res.data, "reactres"); 
+    axios.get('http://yourServerHere:5000/getFiles').then((res) =>{ console.log(res.data, "reactres"); 
     
     const myArray = [...Object.values(res.data)];
 
@@ -174,7 +177,7 @@ const createFile = () => {
   
   var config = {
     method: 'post',
-    url: 'http://yourServerHere/createFile',
+    url: 'http://yourServerHere:5000/createFile',
     headers: { 
       'Content-Type': 'application/json'
     },
@@ -194,11 +197,17 @@ const createFile = () => {
 
     useEffect(() => {
 
-    let password = prompt('Please enter password'); 
-  
-    if(password!==REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
+      if(!passwordEntered){
 
-    axios.get('http://yourServerHere/getFiles').then((res) =>{ 
+        let password = prompt('Please enter password'); 
+  
+        if(password!==REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
+
+        setPasswordEntered(true);
+
+      }
+
+    axios.get('http://yourServerHere:5000/getFiles').then((res) =>{ 
       // console.log(res.data, " --axios response"); 
     // console.log(typeof(res.data))
   
@@ -248,7 +257,7 @@ const createFile = () => {
 
 {sortABC ? 
       
-       fullFileObject?.sort((a,b) => b.Name.localeCompare(a.Name)).map((item, index) => 
+       fullFileObject?.sort((a,b) => a.Name.localeCompare(b.Name)).map((item, index) => 
     
        <div id="modalButtons" key={index}>
         
