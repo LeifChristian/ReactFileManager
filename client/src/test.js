@@ -216,14 +216,14 @@ const createFile = () => {
      changeFullFileObject(myArray);
     //  console.log(fullFileObject, 'fyullsy')
 
-     console.log(myArray);
+     console.log(myArray, "array from response");
     const otherArray = []
 
     for( let i in myArray){
       otherArray.push(myArray[i].Name);
     }
 
-  console.log(otherArray)
+  console.log(otherArray, " array of file names")
 
     changeFilesToParse(otherArray)})
        
