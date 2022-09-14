@@ -55,11 +55,11 @@ fs.readdir('./client/src/filesToParse', function (err, files) {
     myArray.forEach((file, index) => {
 
       
-    let { birthtime } = fs.statSync(`./client/src/filesToParse/${myArray[index]}`,)
+    let { mtime } = fs.statSync(`./client/src/filesToParse/${myArray[index]}`,)
 
       // console.log("Name:", file, "Created:", birthtime)
 
-      let thingy = Date.parse(birthtime);
+      let thingy = Date.parse(mtime);
       console.log(thingy, 'thingy')
 
       let theObject = {
