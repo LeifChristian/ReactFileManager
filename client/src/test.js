@@ -28,6 +28,7 @@ export default function Test() {
     const [trigger, setTrigger] = useState(false);
     const [sortABC, setSortABC] = useState(false);
     const [fileDate, setFileDate] = useState('')
+    const [passwordEntered, setPasswordEntered] = useState(false);
 
 const editFileInfo = async (fileName) => {   
 
@@ -39,9 +40,10 @@ const editFileInfo = async (fileName) => {
 const writeToFile = async (updatedText, theFileToUpdate) => {
 
   console.log(updatedText, ' -updated text' )
+  console.log(theFileToUpdate, 'fuckty fucks')
 
 var data = JSON.stringify({
-  "file": theFileToUpdate,
+  "file": theFileToUpdate.Name,
   "text": updatedText,
 });
 
@@ -108,7 +110,7 @@ const deleteStuff = () => {
     // alert("yes")
 
     var data = JSON.stringify({
-      "fileToDelete": currentFile,
+      "fileToDelete": currentFile.Name,
     });
     
     var config = {
@@ -195,9 +197,15 @@ const createFile = () => {
 
     useEffect(() => {
 
-    let password = prompt('Please enter password'); 
+      if(!passwordEntered){
+
+        let password = prompt('Please enter password'); 
   
-    if(password!==REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
+        if(password!==REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
+
+        setPasswordEntered(true);
+
+      }
 
     axios.get('/getFiles').then((res) =>{ 
       // console.log(res.data, " --axios response"); 
