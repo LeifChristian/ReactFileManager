@@ -40,7 +40,7 @@ const editFileInfo = async (fileName) => {
 const writeToFile = async (updatedText, theFileToUpdate) => {
 
   console.log(updatedText, ' -updated text' )
-  console.log(theFileToUpdate, 'fuckty fucks')
+  console.log(theFileToUpdate, ' -file object')
 
 var data = JSON.stringify({
   "file": theFileToUpdate.Name,
@@ -58,7 +58,7 @@ var config = {
 
 axios(config)
 .then(function (response) {
-  console.log(JSON.stringify(response.data));
+  console.log(response.data);
 })
 .catch(function (error) {
   console.log(error);
