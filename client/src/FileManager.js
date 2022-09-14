@@ -17,7 +17,7 @@ const customStyles = {
   },
 };
 
-export default function Test() {
+export default function FileManager() {
   const { REACT_APP_MY_ENV } = process.env;
     const [filesToParse, changeFilesToParse] = useState([]);
     const [fullFileObject, changeFullFileObject] = useState([]);
@@ -216,14 +216,14 @@ const createFile = () => {
      changeFullFileObject(myArray);
     //  console.log(fullFileObject, 'fyullsy')
 
-     console.log(myArray, "array from response");
+     console.log(myArray, "array from response object");
     const otherArray = []
 
     for( let i in myArray){
       otherArray.push(myArray[i].Name);
     }
 
-  console.log(otherArray, " array of file names")
+  console.log(otherArray, " array of just file names")
 
     changeFilesToParse(otherArray)})
        
