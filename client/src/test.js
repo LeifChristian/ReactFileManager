@@ -73,7 +73,7 @@ const renameStuff = () => {
   setFileName(enteredName);
 
   var data = JSON.stringify({
-    "file": currentFile,
+    "file": currentFile.Name,
     "newFileName": enteredName
   });
   

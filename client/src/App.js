@@ -6,7 +6,7 @@ import Test from './test';
 function App() {
   
   return (
-    <div className="App"><h2>React File Manager</h2>
+    <div className="App"><h2 id = "title">React File Manager</h2>
     <Test></Test>
     </div>
   );

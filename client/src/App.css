@@ -4,6 +4,10 @@
   
 }
 
+#title {
+  margin-bottom: -.05%;
+}
+
 #modalText textarea {
   margin-top: 3%;
   text-align: center;
