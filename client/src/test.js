@@ -30,7 +30,7 @@ export default function Test() {
     const [fileDate, setFileDate] = useState('')
 
 const editFileInfo = async (fileName) => {   
-  await axios.post(`http://yourServerHere:3006/getFile?fileName=${fileName}`, )
+  await axios.post(`http://yourServerHere:3006/getFile?fileName=${fileName.Name}`, )
     .then((res) => {console.log(res.data); 
       
       changeTextFromFile(res.data)}); setIsOpen(true);  console.log(fileName)}
