@@ -26,7 +26,7 @@ export default function Test() {
     const [fileName, setFileName] = useState('');
     const [modalIsOpen, setIsOpen] = useState(false);
     const [trigger, setTrigger] = useState(false);
-    const [sortABC, setSortABC] = useState(false);
+    const [sortABC, setSortABC] = useState(true);
     const [fileDate, setFileDate] = useState('')
     const [passwordEntered, setPasswordEntered] = useState(false);
 
@@ -272,7 +272,7 @@ const createFile = () => {
     
     <div id="modalButtons" key={index}>
      
-     <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFileInfo(item)}}>{item.Name}{/* {item.Created}*/}</button>
+     <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFileInfo(item)}}>{item.Name} -- {new Date(item.Created).toString().substring(4,25)} {/* {item.Created}*/}</button>
      {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFileInfo(item)}}>...</button> */}
     
     </div>
