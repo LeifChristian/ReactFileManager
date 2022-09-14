@@ -252,7 +252,7 @@ const createFile = () => {
       
       </Modal>
 
-      {sortABC ? <button style={{color: 'lightblue', fontStyle:'italic'}} onClick={()=> {setSortABC(prevState=>!prevState)}}>A-Z</button> : 
+      {sortABC ? <button style={{color: 'lightblue', fontStyle:'italic', marginBottom: '1%'}} onClick={()=> {setSortABC(prevState=>!prevState)}}>A-Z</button> : 
       <button style={{color: 'lightblue', fontStyle:'italic', marginBottom: '1%'}} onClick={()=> {setSortABC(prevState=>!prevState)}}>MM/DD</button>  }
 
 {sortABC ? 
