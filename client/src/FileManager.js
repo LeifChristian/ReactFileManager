@@ -41,7 +41,6 @@ const editFileInfo = async (fileName) => {
     }
 // console.log(REACT_APP_MY_ENV, 'env')
 
-
 const writeToFile = async (updatedText, theFileToUpdate) => {
 
   console.log(updatedText, ' -updated text' )
@@ -157,9 +156,6 @@ const deleteStuff = () => {
 
     changeFullFileObject(myArray)
     changeFilesToParse(otherArray)
-    
-    // changeFilesToParse(res.data)
-  
   
   })
 

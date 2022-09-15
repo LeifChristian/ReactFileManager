@@ -7,12 +7,16 @@ Create, Read, Update and Delete files with React and Express.
 
 This branch contains .env variables on both the client and server side.
 
-These .env files are identical in front end and back end and contain the following variables:
+The client .env contains the following:
 
 REACT_APP_MY_ENV=yourPasswordForFrontEnd
 REACT_APP_API_SECRET=yourBackEndSecret
 
-create two .env files and include these variables, and make sure they match up!
+the server side .env (root directory) .env contains:
+
+API_SECRET=yourBackEndSecret
+
+Create two .env files, include these variables, and make your secrets match up!
 
 Files parsed come from the directory: client/src/filesToParse
 
