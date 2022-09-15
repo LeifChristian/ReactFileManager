@@ -10,6 +10,7 @@ This branch contains .env variables on both the client and server side.
 The client .env contains the following:
 
 REACT_APP_MY_ENV=yourPasswordForFrontEnd
+
 REACT_APP_API_SECRET=yourBackEndSecret
 
 the server side .env (root directory) .env contains:
