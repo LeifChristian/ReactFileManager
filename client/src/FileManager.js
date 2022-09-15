@@ -34,7 +34,7 @@ const editFileInfo = async (fileName) => {
   await axios.post(`/getFile?fileName=${fileName.Name}&string=${process.env.REACT_APP_API_SECRET}`, )
     .then((res) => {console.log(res.data); 
 
-      if(res.data == "2"){alert('invalid .env variables'); window.location.reload(); return;} 
+      if(res.data === "2"){alert('invalid .env variables'); window.location.reload(); return;} 
 
       else{ setIsOpen(true); }
       changeTextFromFile(res.data)});  console.log(fileName)
@@ -66,7 +66,7 @@ axios(config)
 .then(function (response) {
   console.log(response.data);
 
-  if(response.data == "2"){alert('invalid .env variables'); window.location.reload(); return;} 
+  if(response.data === "2"){alert('invalid .env variables'); window.location.reload(); return;} 
 
 })
 .catch(function (error) {
@@ -100,7 +100,7 @@ const renameStuff = () => {
   .then(function (response) {
     console.log(JSON.stringify(response.data));
 
-    if(response.data == "2"){alert('invalid .env variables'); window.location.reload(); return;} 
+    if(response.data === "2"){alert('invalid .env variables'); window.location.reload(); return;} 
 
     setTrigger(prevState => !prevState)
   })
@@ -136,7 +136,7 @@ const deleteStuff = () => {
     .then(function (response) {
       console.log(JSON.stringify(response.data));
 
-      if(response.data == "2"){alert('invalid .env variables'); window.location.reload(); return;} 
+      if(response.data === "2"){alert('invalid .env variables'); window.location.reload(); return;} 
 
     })
     .catch(function (error) {
@@ -201,7 +201,7 @@ const createFile = () => {
   .then(function (response) {
     console.log(JSON.stringify(response.data));
 
-    if(response.data == "2"){alert('invalid .env variables'); window.location.reload(); return;} 
+    if(response.data === "2"){alert('invalid .env variables'); window.location.reload(); return;} 
     setTrigger(prevState => !prevState)
   })
   .catch(function (error) {
@@ -214,7 +214,7 @@ const createFile = () => {
 
       if(!passwordEntered){
         let password = prompt('Please enter password'); 
-        if(password!==REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
+        if(password!==process.env.REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
         setPasswordEntered(true);
       }
     axios.get(`/getFiles?string=${process.env.REACT_APP_API_SECRET}`).then((res) =>{ 
@@ -223,7 +223,7 @@ const createFile = () => {
   
     console.log(res.data, 'data');
 
-    if(res.data == "2"){alert('invalid .env variables'); window.location.reload()} 
+    if(res.data === "2"){alert('invalid .env variables'); window.location.reload()} 
 
     // if(res.status==404){alert("invalid auth"); setTrigger(prevState=>!prevState)}
 
