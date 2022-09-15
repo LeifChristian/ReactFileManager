@@ -27,10 +27,7 @@ export default function FileManager() {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [trigger, setTrigger] = useState(false);
     const [sortABC, setSortABC] = useState(true);
-    const [fileDate, setFileDate] = useState('')
     const [passwordEntered, setPasswordEntered] = useState(false);
-
-
 
 const editFileInfo = async (fileName) => {   
 
@@ -40,11 +37,7 @@ const editFileInfo = async (fileName) => {
       if(res.data == "2"){alert('invalid .env variables'); window.location.reload(); return;} 
 
       else{ setIsOpen(true); }
-      
-     
       changeTextFromFile(res.data)});  console.log(fileName)
-    
-    
     }
 // console.log(REACT_APP_MY_ENV, 'env')
 
@@ -122,14 +115,9 @@ const renameStuff = () => {
 }
 
 const deleteStuff = () => {
-
   // console.log(currentFile);
-
     if(window.confirm(`Do you want to delete ${currentFile.Name}?`)){
-    
-    // alert("yes")
-    
-
+  
     var data = JSON.stringify({
       "fileToDelete": currentFile.Name,
       "API_SECRET": process.env.REACT_APP_API_SECRET
@@ -179,7 +167,6 @@ const deleteStuff = () => {
     setTrigger(prevState => !prevState)
   
   } 
-  
   else{setIsOpen(false);return}
 
 }
@@ -187,10 +174,10 @@ const deleteStuff = () => {
 const createFile = () => {
 
   const current = new Date();
+
   let date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
 
   let dateString = current.toString();
-
 
   let newCreatedFileName = prompt('Please enter file name')
 
@@ -225,19 +212,11 @@ const createFile = () => {
 
     useEffect(() => {
 
-      // console.log(process.env.REACT_APP_API_SECRET)
-
       if(!passwordEntered){
-
         let password = prompt('Please enter password'); 
-  
         if(password!==REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
-
         setPasswordEntered(true);
-
       }
-
-
     axios.get(`/getFiles?string=${process.env.REACT_APP_API_SECRET}`).then((res) =>{ 
       // console.log(res.data, " --axios response"); 
     // console.log(typeof(res.data))
