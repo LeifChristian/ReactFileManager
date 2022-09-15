@@ -30,13 +30,25 @@ export default function FileManager() {
     const [fileDate, setFileDate] = useState('')
     const [passwordEntered, setPasswordEntered] = useState(false);
 
+
+
 const editFileInfo = async (fileName) => {   
 
-  await axios.post(`/getFile?fileName=${fileName.Name}`, )
+  await axios.post(`/getFile?fileName=${fileName.Name}&string=${process.env.REACT_APP_API_SECRET}`, )
     .then((res) => {console.log(res.data); 
+
+      if(res.data == "2"){alert('invalid .env variables'); window.location.reload(); return;} 
+
+      else{ setIsOpen(true); }
       
-      changeTextFromFile(res.data)}); setIsOpen(true);  console.log(fileName)}
+     
+      changeTextFromFile(res.data)});  console.log(fileName)
+    
+    
+    }
 // console.log(REACT_APP_MY_ENV, 'env')
+
+
 const writeToFile = async (updatedText, theFileToUpdate) => {
 
   console.log(updatedText, ' -updated text' )
@@ -45,6 +57,7 @@ const writeToFile = async (updatedText, theFileToUpdate) => {
 var data = JSON.stringify({
   "file": theFileToUpdate.Name,
   "text": updatedText,
+  "API_SECRET": process.env.REACT_APP_API_SECRET
 });
 
 var config = {
@@ -59,6 +72,9 @@ var config = {
 axios(config)
 .then(function (response) {
   console.log(response.data);
+
+  if(response.data == "2"){alert('invalid .env variables'); window.location.reload(); return;} 
+
 })
 .catch(function (error) {
   console.log(error);
@@ -74,7 +90,8 @@ const renameStuff = () => {
 
   var data = JSON.stringify({
     "file": currentFile.Name,
-    "newFileName": enteredName
+    "newFileName": enteredName,
+    "API_SECRET": process.env.REACT_APP_API_SECRET 
   });
   
   var config = {
@@ -89,6 +106,9 @@ const renameStuff = () => {
   axios(config)
   .then(function (response) {
     console.log(JSON.stringify(response.data));
+
+    if(response.data == "2"){alert('invalid .env variables'); window.location.reload(); return;} 
+
     setTrigger(prevState => !prevState)
   })
   .catch(function (error) {
@@ -108,9 +128,11 @@ const deleteStuff = () => {
     if(window.confirm(`Do you want to delete ${currentFile.Name}?`)){
     
     // alert("yes")
+    
 
     var data = JSON.stringify({
       "fileToDelete": currentFile.Name,
+      "API_SECRET": process.env.REACT_APP_API_SECRET
     });
     
     var config = {
@@ -125,6 +147,9 @@ const deleteStuff = () => {
     axios(config)
     .then(function (response) {
       console.log(JSON.stringify(response.data));
+
+      if(response.data == "2"){alert('invalid .env variables'); window.location.reload(); return;} 
+
     })
     .catch(function (error) {
       console.log(error);
@@ -172,7 +197,8 @@ const createFile = () => {
   var data = JSON.stringify({
 
     "newCreatedFileName": newCreatedFileName,
-    "test": dateString
+    "test": dateString,
+    "API_SECRET": process.env.REACT_APP_API_SECRET
   });
   
   var config = {
@@ -187,6 +213,8 @@ const createFile = () => {
   axios(config)
   .then(function (response) {
     console.log(JSON.stringify(response.data));
+
+    if(response.data == "2"){alert('invalid .env variables'); window.location.reload(); return;} 
     setTrigger(prevState => !prevState)
   })
   .catch(function (error) {
@@ -196,6 +224,8 @@ const createFile = () => {
 }
 
     useEffect(() => {
+
+      // console.log(process.env.REACT_APP_API_SECRET)
 
       if(!passwordEntered){
 
@@ -207,23 +237,29 @@ const createFile = () => {
 
       }
 
-    axios.get('/getFiles').then((res) =>{ 
+
+    axios.get(`/getFiles?string=${process.env.REACT_APP_API_SECRET}`).then((res) =>{ 
       // console.log(res.data, " --axios response"); 
     // console.log(typeof(res.data))
   
+    console.log(res.data, 'data');
+
+    if(res.data == "2"){alert('invalid .env variables'); window.location.reload()} 
+
+    // if(res.status==404){alert("invalid auth"); setTrigger(prevState=>!prevState)}
 
     const myArray = [...Object.values(res.data)];
      changeFullFileObject(myArray);
-    //  console.log(fullFileObject, 'fyullsy')
+    //  console.log(fullFileObject, 'fullsy')
 
      console.log(myArray, "array from response object");
     const otherArray = []
 
-    for( let i in myArray){
+    for(let i in myArray){
       otherArray.push(myArray[i].Name);
     }
 
-  console.log(otherArray, " array of just file names")
+  console.log(otherArray, " array of file names")
 
     changeFilesToParse(otherArray)})
        
@@ -247,7 +283,9 @@ const createFile = () => {
 
       <br></br>
 
-      <div id = "modalButtons">   <button onClick={(e) => {setIsOpen(false); writeToFile(textFromFile, currentFile)}}> <span role="img" aria-label="save">💾</span> </button>
+      <div id = "modalButtons">   <button onClick={(e) => {setIsOpen(false); writeToFile(textFromFile, currentFile)}}> 
+
+                                                <span role="img" aria-label="save">💾</span> </button>
       <button onClick={() => {deleteStuff()}}> <span role="img" aria-label="delete">☠️</span>  </button>
       <button onClick={() => {renameStuff()}}> <span role="img" aria-label="rename">📋</span> </button>
       <button onClick={() => setIsOpen(false)}> <span role="img" aria-label="cancel">🖖</span></button>
@@ -260,11 +298,11 @@ const createFile = () => {
 
 {sortABC ? 
       
-       fullFileObject?.sort((a,b) => a.Name.localeCompare(b.Name)).map((item, index) => 
+       fullFileObject?.sort((a,b) => a?.Name?.localeCompare(b?.Name)).map((item, index) => 
     
        <div id="modalButtons" key={index}>
         
-        <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFileInfo(item)}}>{item.Name}</button>
+        <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFileInfo(item)}}>{item?.Name}</button>
         {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFileInfo(item)}}>...</button> */}
        
        </div>
@@ -281,9 +319,6 @@ const createFile = () => {
     </div>
     
     )}
-
-
-
 
 
        <div id="modalButtons"><button onClick={()=> {createFile();}}>+</button></div>

@@ -6,7 +6,7 @@ import FileManager from './FileManager';
 function App() {
   
   return (
-    <div className="App"><h2 id = "title">React File Manager</h2>
+    <div className="App"><h2 id = "title">React File Manager Breaking Beta</h2>
     <FileManager></FileManager>
     </div>
   );
