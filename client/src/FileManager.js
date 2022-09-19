@@ -208,11 +208,15 @@ const createFile = () => {
 
     useEffect(() => {
 
-      if(!passwordEntered){
-        let password = prompt('Please enter password'); 
-        if(password!==process.env.REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
-        setPasswordEntered(true);
-      }
+      // if(!passwordEntered){
+      //   let password = prompt('Please enter password'); 
+      //   if(password!==process.env.REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
+      //   setPasswordEntered(true);
+      // }
+
+      setPasswordEntered(true)
+ // above is disabled for development. re-enable to use front end password protect with .env
+
     axios.get(`/getFiles?string=${process.env.REACT_APP_API_SECRET}`).then((res) =>{ 
       // console.log(res.data, " --axios response"); 
     // console.log(typeof(res.data))
@@ -277,7 +281,7 @@ const createFile = () => {
     
        <div id="modalButtons" key={index}>
         
-        <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFileInfo(item)}}>{item?.Name}</button>
+        <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{ console.log(item.isDirectory, "is dir?"); setCurrentFile(item); editFileInfo(item)}}>{item?.Name}</button>
         {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFileInfo(item)}}>...</button> */}
        
        </div>
@@ -288,7 +292,7 @@ const createFile = () => {
     
     <div id="modalButtons" key={index}>
      
-     <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFileInfo(item)}}>{item.Name} | {new Date(item.Created).toString().substring(4,25)} {/* {item.Created}*/}</button>
+     <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFileInfo(item)}}>{item.Name} ~ {new Date(item.Created).toString().substring(4,25)} {/* {item.Created}*/}</button>
      {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFileInfo(item)}}>...</button> */}
     
     </div>

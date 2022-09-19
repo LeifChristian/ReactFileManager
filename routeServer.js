@@ -33,6 +33,8 @@ fs.readdir('./client/src/filesToParse',  (err, files) => {
       console.log(err);
       return;
     }
+
+
     console.log(files);
 
     console.log(typeof(files))
@@ -44,14 +46,21 @@ fs.readdir('./client/src/filesToParse',  (err, files) => {
     console.log(myArray[0])
 
     myArray.forEach((file, index) => {   
-    let { mtime } = fs.statSync(`./client/src/filesToParse/${myArray[index]}`,)
+    let { mtime } = fs.statSync(`./client/src/filesToParse/${myArray[index]}`)
     // console.log("Name:", file, "Created:", birthtime)
       let thingy = Date.parse(mtime);
       console.log(thingy, 'numerical date')
 
+      // fs.lstatSync(`./client/src/filesToParse/${myArray[index]}`).isDirectory();
+      
+let isDirExists = (fs.lstatSync(`./client/src/filesToParse/${myArray[index]}`).isDirectory())
+
+console.log(isDirExists, "isdir?")
+
       let theObject = {
         Name: file,
-        Created: thingy
+        Created: thingy,
+        isDirectory: isDirExists
       };
 
       filesAndTimes.push(theObject)
