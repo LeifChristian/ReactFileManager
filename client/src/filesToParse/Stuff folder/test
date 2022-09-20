@@ -1,0 +1,225 @@
+BLOG
+Copied
+
+BACK
+3 Ways of Passing Multiple Parameters to the onClick Handler in React
+
+Fernando Doglio
+, 
+February 21st, 2022 · 4 min read
+
+While everyone who’s worked on a web development project in the past has had to deal with the onClick event (whether it was using React, Vue or even Vanilla JS) going beyond the basic functionality of calling a simple function to deal with the event object is not that trivial.
+
+In this example-based article I want to quickly cover different ways to send multiple parameters to your event handling function without having to sell your soul to Satan.
+
+The example use case
+Let’s take a quick look at a fake use case so we’re all on the same page. Pretend you have a list of items on a fake checkout cart, each item has many properties and upon clicking one of the buttons, you need to delete it from the cart. The problem though, is that deleting it is not that trivial. Before you take it out of the list, you first need to:
+
+Make sure it hasn’t been inside the cart for longer than an hour. If it has, the client can’t remove it. I know, crazy rule, but this is a fake use case, so let’s have some fun, shall we?
+Update the category counter to make sure the total amount is correct.
+Only then, if everything is fine, we can proceed to remove the item from the list.
+
+And here is the relevant code that we’re going to be working with:
+
+Copy 
+import { useState } from "react"
+const fakeItems = [
+    {name: "Ergo keyboard", price: 200, pictureUrl: "https://images.squarespace-cdn.com/content/v1/5a8723cb7131a5121206d464/1625810188933-U8XTJAMWR8A0MJDJ32QA/lain_top.jpg?format=2500w",  id: 1, category: 1, timeAdded: new Date() },
+    {name: "Smallice PCB", price: 120, pictureUrl: "https://images.squarespace-cdn.com/content/v1/5a8723cb7131a5121206d464/1617681008502-BJJPF8TRPN6LNTMUBROR/idi7pnppq0d61.jpg?format=2500w",  id: 2, category: 2, timeAdded: new Date() },
+    {name: "Smallice Acrylic Case", price: 400, pictureUrl: "https://images.squarespace-cdn.com/content/v1/5a8723cb7131a5121206d464/1623041004115-JPO9UY3R357ZTPUAWM2D/PXL_20210601_203954893.PORTRAIT_2.jpg?format=2500w", id: 3, category: 3, timeAdded: new Date()},
+    {name: "Fourier", price: 320, pictureUrl: "https://images.squarespace-cdn.com/content/v1/5a8723cb7131a5121206d464/1606189295901-T565PVE49OZXN9QK82LD/_RO_5289.jpg?format=2500w", id: 4, category: 4, timeAdded: new Date() }
+];
+export default function ShoppingCart() {
+    const [items, setItems] = useState(fakeItems)
+    async function updateCategory() {
+        //the code required to check the category goes here...
+    }
+    function checkTime() {
+        //the time-checking logic goes here....
+    }
+    async function removeItem(id) {
+        //right this this logic is missing the category id
+        //and the time of insertion into the cart
+        let categoryUpdate =  await updateCategory()
+        let timeCheck = checkTime()
+        if(!categoryUpdate) {
+            return console.log("Error, category was not updated")
+        }
+        if(!timeCheck) {
+            return console.log("Error, item has been inside your cart for too long, now you gotta buy it")
+        }
+        let newItems = items.filter( i => i.id != id)
+        setItems(newItems)
+    }
+    return (
+        <ul className="shopping-list">
+            {items.map( i => {
+                return (<li key={i.id} className="shopping-list-item">
+                            <img src={i.pictureUrl} />
+                         <br /> {i.name} <span className="price">(USD {i.price})</span>
+                        &nbsp; <a onClick={ () => removeItem(i.id)})
+                        }} href="#">[Remove]</a>
+                    </li>)
+            })}
+        </ul>
+    )
+}
+The code from above would render something like shown on the following image:
+
+null
+
+Granted, it’s by no means a nice-looking shopping cart, but it’s a list of items that you can remove based on certain conditions. That’ll do. Notice that the logic for category update and time checking is not implemented. That’s not relevant right now, so just assume it works, and we’ll deal with the surrounding logic instead.
+
+With that said, the first thing to note from the code, is that the onClick handler as it stands right now is calling the removeItem function with the item’s id (the i.id). This is a very common way of passing an attribute to the function, however, one is not going to be enough, we need more attributes, so let’s see what our options are.
+
+#1. Using an inline arrow function
+Following the example from above, a very simple way of passing multiple attributes to your handler, is to call the handler from within an inline arrow function.
+
+Copy 
+async function removeItem(id, catId, timeAdded) {
+        //right this this logic is missing the category id
+        //and the time of insertion into the cart
+        let categoryUpdate =  await updateCategory(catId)
+        let timeCheck = checkTime(timeAdded)
+        if(!categoryUpdate) {
+            return console.log("Error, category was not updated")
+        }
+        if(!timeCheck) {
+            return console.log("Error, item has been inside your cart for too long, now you gotta buy it")
+        }
+        let newItems = items.filter( i => i.id != id)
+        setItems(newItems)
+    }
+    return (
+        <ul className="shopping-list">
+            {items.map( i => {
+                return (<li key={i.id} className="shopping-list-item">
+                            <img src={i.pictureUrl} />
+                         <br /> {i.name} <span className="price">(USD {i.price})</span>
+                        &nbsp; 
+                        <a onClick={ 
+                            () => {
+                                e.preventDefault(); 
+                                removeItem(i.id, i.category, i.timeAdded)
+                            }
+                        }} href="#">[Remove]</a>
+                    </li>)
+            })}
+        </ul>
+    )
+The code added on the onClick line on the <a> element defines an inline arrow function. Since it’s a function definition, it will not be called immediately, but the closure generated allows you to access the item’s details when it does get called. This method works, don’t get me wrong, however, it litters a bit the JSX code with business logic for the front-end and if you need to pass a lot of attributes then this line can become a bit complicated to read. On top of that, we’re also having to call the e.preventDefault method to keep the click event from doing anything other than what we actually want. This is just me nitpicking, but if you ask me, I think there are less “crude” ways of doing this. Sometimes hiding a bit of the logic can help make the HTML more maintainable. So let’s take a quick look at the alternatives.
+
+#2. Using the useCallback hook
+The useCallback hook will allow us to clean up the code a bit and on top of that, our function will be memoized. For the purposes of this example, the second benefit is not that important, however, it’s definitely an added bonus. The code would look like this:
+
+Copy 
+export default function ShoppingCart() {
+    //rest of the component's logic goes here...
+    
+    const removeHandler = useCallback( (id, catId, timeAdded) => {
+       return async (e) => {
+        e.preventDefault() //we can all this directly here now!
+        let categoryUpdate =  await updateCategory(catId)
+        let timeCheck = checkTime(timeAdded)
+        if(!categoryUpdate) {
+            return console.log("Error, category was not updated")
+        }
+        if(!timeCheck) {
+            return console.log("Error, item has been inside your cart for too long, now you gotta buy it")
+        }
+        let newItems = items.filter( i => i.id != id)
+        setItems(newItems)
+       } 
+    }, [items])
+    return (
+        <ul className="shopping-list">
+            {items.map( i => {
+                return (<li key={i.id} className="shopping-list-item">
+                            <img src={i.pictureUrl} />
+                         <br /> {i.name} <span className="price">(USD {i.price})</span>
+                        &nbsp; 
+                        <a onClick={ removeHandler(i.id, i.category, i.timeAdded) } href="#">
+                            [Remove]
+                        </a>
+                    </li>)
+            })}
+        </ul>
+    )
+}
+The code with this hook looks a bit cleaner. For starters, we’re calling a function directly on the onClick handler. There is no longer a need to define an inline arrow function, we can simply call a function and pass the attributes we need. This new function will return the actual handler, which in turn, receives the Event object, so we can safely call the e.preventDefault method from within the handler, instead of right there on the HTML.
+
+This is a better alternative already because we’re abstracting the creation of the handler function and how it should interact with the event. However, we can clean up our code a bit more, by taking advantage of HTML’s data attributes. So let’s take a look.
+
+Open Source Session Replay
+OpenReplay is an open-source, session replay suite that lets you see what users do on your web app, helping you troubleshoot issues faster. OpenReplay is self-hosted for full control over your data.
+
+replayer.png
+
+Start enjoying your debugging experience - start using OpenReplay for free.
+
+#3. Using data attributes
+The data attributes are custom attributes you can add to your HTML and that by default, will be completely ignored by the browser, however you can use them and access them through JavaScript. The point is that you can “embed” the attributes of a cart item into the actual HTML of the element instead of having to pass it directly using code. It’s a neat way to keep the HTML as “clean” as possible. This is how it would look like:
+
+Copy 
+export default function ShoppingCart() {
+    //the rest of the logic of the component goes here...
+    
+    const removeHandler = async (e) => {
+        e.preventDefault()
+        //capture the attributes of the element
+        let id = e.target.getAttribute("data-id")
+        let catId = e.target.getAttribute("data-category")
+        let timeAdded = e.target.getAttribute("data-timeadded")
+        let categoryUpdate =  await updateCategory(catId)
+        let timeCheck = checkTime(timeAdded)
+        if(!categoryUpdate) {
+            return console.log("Error, category was not updated")
+        }
+        if(!timeCheck) {
+            return console.log("Error, item has been inside your cart for too long, now you gotta buy it")
+        }
+        let newItems = items.filter( i => i.id != id)
+        setItems(newItems)
+    } 
+    
+    return (
+        <ul className="shopping-list">
+            {items.map( i => {
+                return (<li key={i.id} className="shopping-list-item">
+                            <img src={i.pictureUrl} />
+                         <br /> {i.name} <span className="price">(USD {i.price})</span>
+                        &nbsp; 
+                        <a 
+                        data-id={i.id}
+                        data-category={i.category}
+                        data-timeadded={i.timeAdded}
+                        onClick={ removeHandler } href="#">
+                            [Remove]
+                        </a>
+                    </li>)
+            })}
+        </ul>
+    )
+}
+Now look at the HTML of the link, you can see the 3 data- attributes containing the values associated with the item. The onClick handler also looks a lot cleaner, there is no need to pass any attributes into it, you only have to worry about specifying the handler’s name. The only attribute you care about, is the actual event, which React will pass for you. And thr ough the event’s target, you can see how we use the getAttribute method to get the information we need.
+
+The result is a much cleaner HTML, simplified logic and overall a code that not only works, but it’s also a lot easier to read and understand.
+
+In the end, the way you write your code matters only to you and your team. There is not a single way of passing multiple attributes to the onClick handler in React, and all potential options do get the job done, so it’s a matter of understanding what other needs you have and you’re trying to achieve.
+
+If you’ve managed to solve this problem in another way, follow me on Twitter at @deleteman123 and share your solution.
+
+newsletter
+
+More articles from OpenReplay Blog
+
+An Introduction to JavaScript Error Handling
+Learn the basics around error handling in JavaScript
+
+February 21st, 2022 · 4 min read
+
+Vue 3 - the Evolution of Vue
+Learn how Vue got to where it at right now and the key features that make it one of the best frameworks available
+
+February 18th, 2022 · 5 min read
+© 2022 OpenReplay Blog
