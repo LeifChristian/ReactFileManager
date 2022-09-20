@@ -28,10 +28,11 @@ export default function FileManager() {
     const [trigger, setTrigger] = useState(false);
     const [sortABC, setSortABC] = useState(true);
     const [passwordEntered, setPasswordEntered] = useState(false);
+    const [directory, setNewDirectory] = useState('')
 
-const editFileInfo = async (fileName) => {   
+const editFile = async (fileName) => {   
 
-  await axios.post(`/getFile?fileName=${fileName.Name}&string=${process.env.REACT_APP_API_SECRET}`, )
+  await axios.post(`/getFile?fileName=${fileName.Name}&string=${process.env.REACT_APP_API_SECRET}&directory=${directory}`, )
     .then((res) => {console.log(res.data); 
 
       if(res.data === "2"){alert('invalid .env variables'); window.location.reload(); return;} 
@@ -49,7 +50,9 @@ const writeToFile = async (updatedText, theFileToUpdate) => {
 var data = JSON.stringify({
   "file": theFileToUpdate.Name,
   "text": updatedText,
-  "API_SECRET": process.env.REACT_APP_API_SECRET
+  "API_SECRET": process.env.REACT_APP_API_SECRET,
+  "directory": directory
+
 });
 
 var config = {
@@ -83,7 +86,8 @@ const renameStuff = () => {
   var data = JSON.stringify({
     "file": currentFile.Name,
     "newFileName": enteredName,
-    "API_SECRET": process.env.REACT_APP_API_SECRET 
+    "API_SECRET": process.env.REACT_APP_API_SECRET,
+    "directory": directory
   });
   
   var config = {
@@ -119,7 +123,8 @@ const deleteStuff = () => {
   
     var data = JSON.stringify({
       "fileToDelete": currentFile.Name,
-      "API_SECRET": process.env.REACT_APP_API_SECRET
+      "API_SECRET": process.env.REACT_APP_API_SECRET,
+      'directory': directory
     });
     
     var config = {
@@ -171,7 +176,7 @@ const createFile = () => {
 
   const current = new Date();
 
-  let date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+  let date = `${current.getDate()}/${current.getMonth()}/${current.getFullYear()}`;
 
   let dateString = current.toString();
 
@@ -181,7 +186,8 @@ const createFile = () => {
 
     "newCreatedFileName": newCreatedFileName,
     "test": dateString,
-    "API_SECRET": process.env.REACT_APP_API_SECRET
+    "API_SECRET": process.env.REACT_APP_API_SECRET,
+    "directory": directory
   });
   
   var config = {
@@ -206,18 +212,28 @@ const createFile = () => {
 
 }
 
+const goUptheTree = () => {
+  setNewDirectory('')
+}
+
     useEffect(() => {
 
+
+      console.log('spawn')
       // if(!passwordEntered){
       //   let password = prompt('Please enter password'); 
       //   if(password!==process.env.REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
       //   setPasswordEntered(true);
       // }
 
-      setPasswordEntered(true)
- // above is disabled for development. re-enable to use front end password protect with .env
+       // front end password is disabled for development. re-enable to use front end password protect with .env
 
-    axios.get(`/getFiles?string=${process.env.REACT_APP_API_SECRET}`).then((res) =>{ 
+
+      setPasswordEntered(true)
+
+      // to enable password, comment out duplicate line: setPasswordEntered(true)
+
+    axios.get(`/getFiles?string=${process.env.REACT_APP_API_SECRET}&folder=${directory}`).then((res) =>{ 
       // console.log(res.data, " --axios response"); 
     // console.log(typeof(res.data))
   
@@ -242,7 +258,7 @@ const createFile = () => {
 
     changeFilesToParse(otherArray)})
        
-      }, [trigger])
+      }, [trigger, directory])
 
   return (
 
@@ -281,8 +297,13 @@ const createFile = () => {
     
        <div id="modalButtons" key={index}>
         
-        <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{ console.log(item.isDirectory, "is dir?"); setCurrentFile(item); editFileInfo(item)}}>{item?.Name}</button>
-        {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFileInfo(item)}}>...</button> */}
+        <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{ 
+          
+          console.log("item is directory?", item.isDirectory); 
+          if(item.isDirectory){ setNewDirectory(item.Name); console.log('directory: ', directory)} 
+          else { setCurrentFile(item); editFile(item)}}}
+                                                            >{item?.Name}</button>
+        {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFile(item)}}>...</button> */}
        
        </div>
        
@@ -292,15 +313,14 @@ const createFile = () => {
     
     <div id="modalButtons" key={index}>
      
-     <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFileInfo(item)}}>{item.Name} ~ {new Date(item.Created).toString().substring(4,25)} {/* {item.Created}*/}</button>
-     {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFileInfo(item)}}>...</button> */}
+     <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFile(item)}}>{item.Name} ~ {new Date(item.Created).toString().substring(4,25)} {/* {item.Created}*/}</button>
+     {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFile(item)}}>...</button> */}
     
     </div>
     
     )}
 
-
-       <div id="modalButtons"><button onClick={()=> {createFile();}}>+</button></div>
+      { directory!=="" ? <div id="modalButtons"><button onClick={()=> goUptheTree()}>⇦</button><button onClick={()=> {createFile();}}>+</button></div> : <div id="modalButtons"><button onClick={()=> {createFile();}}>+</button></div>}
 
        <div style={{padding: "2rem", fontSize: '1rem', fontWeight: '300', lineHeight: '30px', marginLeft: '2vw', marginRight: '2vw', whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>
 
