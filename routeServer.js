@@ -229,6 +229,84 @@ app.post('/writeFile', (req, res, next) => {
       res.send(req.body.newCreatedFileName)
   })
 
+
+  app.post('/createDirectory', (req,res,next) => {
+
+    // console.log(req.body.API_SECRET, "SECRET")
+     if(API_SECRET!==req.body.API_SECRET){console.log('invalid auth');res.send("2"); return;}
+    console.log('directory:', req.body.directory)
+    console.log(typeof(req.body.directory))
+
+      if(req.body.directory==""){ console.log('empty dir'); return;}
+
+      else if(req.body.directory!==""){
+        
+        console.log('new directory: ', req.body.directory);
+        
+        if (!fs.existsSync(path.resolve(__dirname, `./client/src/filesToParse/${req.body.directory}`))){
+           fs.mkdirSync(path.resolve(__dirname, `./client/src/filesToParse/${req.body.directory}`));}
+
+      }
+      res.send(`folder ${req.body.directory} created.`)
+  })
+
+  app.post('/renameDirectory', (req,res,next) => {
+    console.log(req.body.oldDirName, " -old name");
+    console.log(req.body.newDirName, 'new name')
+    console.log(req.body.API_SECRET, 'seeee')
+    console.log(req.body?.directory, 'directory!')
+
+
+    console.log(req.body)
+
+    if(API_SECRET!==req.body.API_SECRET){console.log('invalid auth');res.send("2"); return;}
+
+    // res.send('rename route response')
+
+    if(req.body.oldDirName.length>0 && req.body.newDirName.length>0){
+
+      if(req.body.directory==''){
+      fs.rename(path.resolve(__dirname, `./client/src/filesToParse/${req.body.oldDirName}`), 
+      path.resolve(__dirname, `./client/src/filesToParse/${req.body.newDirName}`), (res)=>{console.log(res)})
+      res.send(`${req.body.directory}/${req.body.oldDirName} renamed to ${req.body.directory}/${req.body.newDirName}`)
+    }
+
+      if(req.body.directory!==''){
+        fs.rename( path.resolve(__dirname, `./client/src/filesToParse/${req.body.directory}/${req.body.oldDirName}`), 
+        path.resolve(__dirname, `./client/src/filesToParse/${req.body.directory}/${req.body.newDirName}`), (res)=>{console.log(res)})
+        res.send(`${req.body.oldDirName} renamed to ${req.body.newDirName}`)
+      }
+  }
+
+  else{res.send('invalid paramaters')}
+  })
+
+
+  app.post('/deleteDirectory', (req,res,next) => {
+
+    // console.log(req.body.API_SECRET, "SECRET")
+     if(API_SECRET!==req.body.API_SECRET){console.log('invalid auth');res.send("2"); return;}
+
+     console.log('directory:', req.body.directory)
+     console.log(typeof(req.body.directory))
+
+    if(req.body.directory==''){console.log('no directory'); res.send('no directory'); return}     
+    
+
+      else if(req.body.directory!==""){console.log('not empty dir')
+
+        fs.rmdir(path.resolve(__dirname, `./client/src/filesToParse/${req.body.directory}`), { recursive: true }, err => {
+          if (err) {
+            throw err
+          }
+        
+          console.log(`${req.body.directory} deleted`)
+        })
+
+      }
+      res.send(req.body.directory)
+  })
+
 // Handles any requests that don't match the ones above
 app.get('*', (req,res) =>{
     // res.sendFile(path.join(__dirname+'/client/src/'));

@@ -28,7 +28,10 @@ export default function FileManager() {
     const [trigger, setTrigger] = useState(false);
     const [sortABC, setSortABC] = useState(true);
     const [passwordEntered, setPasswordEntered] = useState(false);
-    const [directory, setNewDirectory] = useState('')
+    const [directory, setNewDirectory] = useState('');
+    const [directoryModal, setDirectoryModal] = useState(false);
+    const [directoryName, setDirectoryName] = useState('');
+    const [oldDirName, setOldDirName] = useState('');
 
 // console.log(REACT_APP_MY_ENV, 'env')
 
@@ -217,9 +220,121 @@ const goUptheTree = () => {
   setNewDirectory('')
 }
 
+const renameDirectory = (thing) => {
+  
+console.log(thing.new, 'theeeeing')
+
+console.log(typeof(thing))
+
+  var data = JSON.stringify({
+    "oldDirName": thing.old,
+    "newDirName": thing.new,
+    "API_SECRET": process.env.REACT_APP_API_SECRET,
+     "directory": directory
+  }); 
+ 
+  var config = {
+    method: 'post',
+    url: '/renameDirectory',
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    data : data
+  };
+  
+  axios(config)
+  .then(function (response) {
+    console.log(JSON.stringify(response.data));
+
+    if(response.data === "2"){alert('invalid .env variables'); window.location.reload(); return;} 
+
+    setTrigger(prevState => !prevState)
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+  setIsOpen(false)
+
+
+
+
+
+}
+
+const createDirectory = () => {
+
+  let theDirectory = prompt('Please enter new directory name: '); 
+
+  if (theDirectory==null){console.log("canceled"); return;}
+
+  var data = JSON.stringify({
+    "API_SECRET": process.env.REACT_APP_API_SECRET,
+    "directory": theDirectory
+  });
+  
+  // console.log(theDirectory)
+  var config = {
+    method: 'post',
+    url: '/createDirectory',
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    data : data
+  };
+  
+  axios(config)
+  .then(function (response) {
+    console.log(response.data);
+    if(response.data === "2"){alert('invalid .env variables'); window.location.reload(); return;} 
+  
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+  setTrigger(prevState=> !prevState)
+}
+
+const deleteDirectory = () => {
+
+  if(!window.confirm(`Do you want to delete ${oldDirName} and it's contents?`)){console.log('canceled'); setDirectoryModal(false); return;}
+
+
+
+  var data = JSON.stringify({
+
+    "API_SECRET": process.env.REACT_APP_API_SECRET,
+    "directory": oldDirName
+  });
+  
+  var config = {
+    method: 'post',
+    url: '/deleteDirectory',
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    data : data
+  };
+  
+  axios(config)
+  .then(function (response) {
+    console.log(JSON.stringify(response.data));
+
+    if(response.data === "2"){alert('invalid .env variables'); window.location.reload(); return;} 
+    setTrigger(prevState => !prevState)
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+  // setTrigger(prevState=>!prevState)
+
+  setDirectoryModal(false);
+
+}
+
     useEffect(() => {
-
-
       console.log('spawn')
       // if(!passwordEntered){
       //   let password = prompt('Please enter password'); 
@@ -229,10 +344,9 @@ const goUptheTree = () => {
 
        // front end password is disabled for development. re-enable to use front end password protect with .env
 
+      // to enable password, comment out duplicate line below: 'setPasswordEntered(true)'
 
       setPasswordEntered(true)
-
-      // to enable password, comment out duplicate line: setPasswordEntered(true)
 
     axios.get(`/getFiles?string=${process.env.REACT_APP_API_SECRET}&folder=${directory}`).then((res) =>{ 
       // console.log(res.data, " --axios response"); 
@@ -283,24 +397,58 @@ const goUptheTree = () => {
       
       </Modal>
 
+      {directoryModal ? <Modal
+        ariaHideApp={false}
+        isOpen={directoryModal}
+        // onAfterOpen={afterOpenModal}
+        // onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      ><div id = "modalText">
+        
+        <h4 style={{marginLeft: 'auto', marginRight: 'auto', textAlign:"center", marginTop: '-.9%', marginBottom: "2%"}}>{directoryName}</h4>
+
+        {/* <textarea  value = {textFromFile} onChange={(e) => {changeTextFromFile(e.target.value)}}></textarea> */}
+{/* <form action=""></form>
+        <input type="text" onSubmit={(e)=> {console.log(e)}}/>  */}
+
+
+
+    <form>
+
+      <label> Rename folder to: <br />
+        <input style={{borderRadius: ".6em"}}
+          type="text" 
+          value={directoryName}
+          onChange={(e) => setDirectoryName(e.target.value)}
+        />
+      </label>
+
+    </form>
+
+      <br></br>
+      <div id = "modalButtons">  
+      <button onClick={(e) => {setDirectoryModal(false); let dir = {"old": oldDirName,  "new": directoryName}; renameDirectory(dir)}}> 
+                                                <span role="img" aria-label="save">💾</span> </button> 
+      <button onClick={() => {deleteDirectory(oldDirName)}}> <span role="img" aria-label="delete">☠️</span>  </button>
+      {/* <button onClick={() => {renameDirectory()}}> <span role="img" aria-label="rename">📋</span> </button> */}
+      <button onClick={() => setDirectoryModal(false)}> <span role="img" aria-label="cancel">🖖</span></button>
+      </div></div>
+      </Modal> : null } 
+
       {sortABC ? <button style={{color: 'lightblue', fontStyle:'italic', marginBottom: '1%'}} onClick={()=> {setSortABC(prevState=>!prevState)}}>A-Z</button> : 
       <button style={{color: 'lightblue', fontStyle:'italic', marginBottom: '1%'}} onClick={()=> {setSortABC(prevState=>!prevState)}}>Latest</button>  }
 
-{sortABC ? 
-      
-       fullFileObject?.sort((a,b) => a?.Name?.localeCompare(b?.Name)).map((item, index) => 
-    
+      {sortABC ? fullFileObject?.sort((a,b) => a?.Name?.localeCompare(b?.Name)).map((item, index) => 
        <div id="modalButtons" key={index}>
-
         {!item.isDirectory? 
-        
         <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{ 
           if(item.isDirectory){  console.log('directory: ', directory)} 
           else { setCurrentFile(item); editFile(item)}}}
-                                                            >{item?.Name}</button> :
-                                                            <button style={{color: 'lightgreen', fontSize: '.8rem', border: 'none'}} onClick={()=>{ changeTextFromFile(''); setNewDirectory(item.Name);setCurrentFile(item); editFile(item)}}>
+                                                            >{item?.Name}</button> :<>
+                                                            <button style={{color: 'lightgreen', fontSize: '.8rem', border: 'none'}} onClick={()=>{ changeTextFromFile(''); setNewDirectory(item.Name); setCurrentFile(item); editFile(item)}}>
                                                             
-                                                            📁 {item.Name} </button>
+                                                            📁 {item.Name} </button> <button style={{borderWidth: 0}} onClick={()=>{setOldDirName(item.Name); setDirectoryName(item.Name); setDirectoryModal(true);}}>...</button></>
                                                           
                                                           }
        
@@ -314,11 +462,11 @@ const goUptheTree = () => {
 
       {!item.isDirectory ?  <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{ setCurrentFile(item); editFile(item)}}>
       
-      {item.Name} ~ {new Date(item.Created).toString().substring(4,21)}</button>:  
+      {item.Name} ~ {new Date(item.Created).toString().substring(4,21)}</button>:  <>
       
       <button style={{color: 'lightgreen', fontSize: '.8rem', border: 'none'}} onClick={()=>{ changeTextFromFile(''); setCurrentFile(item); editFile(item)}}>
       
-      📁 {item.Name} </button>}
+      📁 {item.Name} </button><button style={{borderWidth: 0}} onClick={()=>{setDirectoryName(item.Name); setDirectoryModal(true);}}>...</button></>}
      
      {/* <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{ setCurrentFile(item); editFile(item)}}>
       
@@ -333,7 +481,7 @@ const goUptheTree = () => {
     
     )}
 
-      { directory!=="" ? <div id="modalButtons"><button onClick={()=> {changeTextFromFile('');goUptheTree()}}>⇦</button><button onClick={()=> {createFile();}}>+</button></div> : <div id="modalButtons"><button onClick={()=> {createFile();}}>+</button></div>}
+      { directory!=="" ? <div id="modalButtons"><button onClick={()=> {changeTextFromFile('');goUptheTree()}}>⇦</button><button onClick={()=> {createFile();}}>+</button></div> : <div id="modalButtons"><button onClick={()=> {createFile();}}>+</button><button style={{}}onClick={()=> {createDirectory();}}>**</button></div>}
 
        <div style={{padding: "2rem", fontSize: '1rem', fontWeight: '300', lineHeight: '30px', marginLeft: '2vw', marginRight: '2vw', whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>
 
