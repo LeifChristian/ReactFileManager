@@ -30,6 +30,8 @@ export default function FileManager() {
     const [passwordEntered, setPasswordEntered] = useState(false);
     const [directory, setNewDirectory] = useState('')
 
+// console.log(REACT_APP_MY_ENV, 'env')
+
 const editFile = async (fileName) => {   
 
   await axios.post(`/getFile?fileName=${fileName.Name}&string=${process.env.REACT_APP_API_SECRET}&directory=${directory}`, )
@@ -40,7 +42,6 @@ const editFile = async (fileName) => {
       else{ setIsOpen(true); }
       changeTextFromFile(res.data)});  console.log(fileName)
     }
-// console.log(REACT_APP_MY_ENV, 'env')
 
 const writeToFile = async (updatedText, theFileToUpdate) => {
 
@@ -236,13 +237,8 @@ const goUptheTree = () => {
     axios.get(`/getFiles?string=${process.env.REACT_APP_API_SECRET}&folder=${directory}`).then((res) =>{ 
       // console.log(res.data, " --axios response"); 
     // console.log(typeof(res.data))
-  
-    console.log(res.data, 'data');
-
     if(res.data === "2"){alert('invalid .env variables'); window.location.reload()} 
-
     // if(res.status==404){alert("invalid auth"); setTrigger(prevState=>!prevState)}
-
     const myArray = [...Object.values(res.data)];
      changeFullFileObject(myArray);
     //  console.log(fullFileObject, 'fullsy')
@@ -253,7 +249,6 @@ const goUptheTree = () => {
     for(let i in myArray){
       otherArray.push(myArray[i].Name);
     }
-
   console.log(otherArray, " array of file names")
 
     changeFilesToParse(otherArray)})
@@ -296,14 +291,18 @@ const goUptheTree = () => {
        fullFileObject?.sort((a,b) => a?.Name?.localeCompare(b?.Name)).map((item, index) => 
     
        <div id="modalButtons" key={index}>
+
+        {!item.isDirectory? 
         
         <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{ 
-          
-          console.log("item is directory?", item.isDirectory); 
-          if(item.isDirectory){ setNewDirectory(item.Name); console.log('directory: ', directory)} 
+          if(item.isDirectory){  console.log('directory: ', directory)} 
           else { setCurrentFile(item); editFile(item)}}}
-                                                            >{item?.Name}</button>
-        {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFile(item)}}>...</button> */}
+                                                            >{item?.Name}</button> :
+                                                            <button style={{color: 'lightgreen', fontSize: '.8rem', border: 'none'}} onClick={()=>{ changeTextFromFile(''); setNewDirectory(item.Name);setCurrentFile(item); editFile(item)}}>
+                                                            
+                                                            📁 {item.Name} </button>
+                                                          
+                                                          }
        
        </div>
        
@@ -312,15 +311,29 @@ const goUptheTree = () => {
        :  fullFileObject?.sort((a,b) => b.Created - a.Created).map((item, index) => 
     
     <div id="modalButtons" key={index}>
+
+      {!item.isDirectory ?  <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{ setCurrentFile(item); editFile(item)}}>
+      
+      {item.Name} ~ {new Date(item.Created).toString().substring(4,21)}</button>:  
+      
+      <button style={{color: 'lightgreen', fontSize: '.8rem', border: 'none'}} onClick={()=>{ changeTextFromFile(''); setCurrentFile(item); editFile(item)}}>
+      
+      📁 {item.Name} </button>}
      
-     <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{; setCurrentFile(item); editFile(item)}}>{item.Name} ~ {new Date(item.Created).toString().substring(4,25)} {/* {item.Created}*/}</button>
+     {/* <button style={{color: 'lightblue', fontSize: '.8rem'}} onClick={()=>{ setCurrentFile(item); editFile(item)}}>
+      
+      {item.Name} ~ {new Date(item.Created).toString().substring(4,21)}</button>
+       */}
+      
+      
+       {/* {item.Created}*/}
      {/* <button  style={{color: 'lightblue', fontSize: '1rem', border: 'none'}} onClick={()=> {setCurrentFile(item); editFile(item)}}>...</button> */}
     
     </div>
     
     )}
 
-      { directory!=="" ? <div id="modalButtons"><button onClick={()=> goUptheTree()}>⇦</button><button onClick={()=> {createFile();}}>+</button></div> : <div id="modalButtons"><button onClick={()=> {createFile();}}>+</button></div>}
+      { directory!=="" ? <div id="modalButtons"><button onClick={()=> {changeTextFromFile('');goUptheTree()}}>⇦</button><button onClick={()=> {createFile();}}>+</button></div> : <div id="modalButtons"><button onClick={()=> {createFile();}}>+</button></div>}
 
        <div style={{padding: "2rem", fontSize: '1rem', fontWeight: '300', lineHeight: '30px', marginLeft: '2vw', marginRight: '2vw', whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>
 
