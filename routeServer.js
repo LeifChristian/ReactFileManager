@@ -34,7 +34,7 @@ app.get("/getFiles", (req, res) => {
     console.log("contains folder: ", req.query.folder);
     // !req.query.folder ? console.log('no folder sent with request, using base folder') : '';
     fs.readdir(
-      `./client/src/filesToParse/${req.query.folder}`,
+      `./client/src/${req.query.folder}`,
       (err, files) => {
         if (err) {
           console.log(err);
@@ -48,26 +48,26 @@ app.get("/getFiles", (req, res) => {
 
         myArray.forEach((file, index) => {
           let { mtime } = fs.statSync(
-            `./client/src/filesToParse/${req.query.folder}/${myArray[index]}`
+            `./client/src/${req.query.folder}/${myArray[index]}`
           );
           // console.log("Name:", file, "Created:", birthtime)
           let thingy = Date.parse(mtime);
           // console.log( myArray[index], 'birthtime: ', thingy)
           if (
             fs.existsSync(
-              `./client/src/filesToParse/${req.query.folder}/${myArray[index]}`
+              `./client/src/${req.query.folder}/${myArray[index]}`
             )
           ) {
             console.log("");
           } else {
             console.log(
-              `./client/src/filesToParse/${myArray[index]} doesn't exist`
+              `./client/src/${myArray[index]} doesn't exist`
             );
             return;
           }
           let isDir = fs
             .lstatSync(
-              `./client/src/filesToParse/${req.query.folder}/${myArray[index]}`
+              `./client/src/${req.query.folder}/${myArray[index]}`
             )
             .isDirectory();
 
@@ -87,7 +87,7 @@ app.get("/getFiles", (req, res) => {
     );
     return;
   } else
-    fs.readdir("./client/src/filesToParse", (err, files) => {
+    fs.readdir("./client/src", (err, files) => {
       if (err) {
         console.log(err);
         return;
@@ -103,22 +103,22 @@ app.get("/getFiles", (req, res) => {
 
       myArray.forEach((file, index) => {
         let { mtime } = fs.statSync(
-          `./client/src/filesToParse/${myArray[index]}`
+          `./client/src/${myArray[index]}`
         );
         let thingy = Date.parse(mtime);
         // console.log( myArray[index], 'birthtime: ', thingy)
         // fs.lstatSync(`./client/src/filesToParse/${myArray[index]}`).isDirectory();
-        if (fs.existsSync(`./client/src/filesToParse/${myArray[index]}`)) {
+        if (fs.existsSync(`./client/src/${myArray[index]}`)) {
           null;
         } else {
           console.log(
-            `./client/src/filesToParse/${myArray[index]} doesn't exist`
+            `./client/src/${myArray[index]} doesn't exist`
           );
           return;
         }
 
         let isDir = fs
-          .lstatSync(`./client/src/filesToParse/${myArray[index]}`)
+          .lstatSync(`./client/src/${myArray[index]}`)
           .isDirectory();
 
         // console.log("is it a directory: ", isDir )
@@ -147,12 +147,12 @@ app.post("/getFile", (req, res, next) => {
   if (req.query.directory !== "") {
     isDir = fs
       .lstatSync(
-        `./client/src/filesToParse/${req.query.directory}/${req.query.fileName}`
+        `./client/src/${req.query.directory}/${req.query.fileName}`
       )
       .isDirectory();
   } else {
     isDir = fs
-      .lstatSync(`./client/src/filesToParse/${req.query.fileName}`)
+      .lstatSync(`./client/src/${req.query.fileName}`)
       .isDirectory();
   }
 
@@ -182,14 +182,14 @@ app.post("/getFile", (req, res, next) => {
       ? (file = fs.readFileSync(
           path.resolve(
             __dirname,
-            `./client/src/filesToParse/${req.query.fileName}`
+            `./client/src/${req.query.fileName}`
           ),
           "utf8"
         ))
       : (file = fs.readFileSync(
           path.resolve(
             __dirname,
-            `./client/src/filesToParse/${req.query.directory}/${req.query.fileName}`
+            `./client/src/${req.query.directory}/${req.query.fileName}`
           ),
           "utf8"
         ));
@@ -215,7 +215,7 @@ app.post("/writeFile", (req, res, next) => {
     fs.writeFileSync(
       path.resolve(
         __dirname,
-        `./client/src/filesToParse/${req.body.directory}/${req.body.file}`
+        `./client/src/${req.body.directory}/${req.body.file}`
       ),
       req.body.text,
       { encoding: "utf8", flag: "w" }
@@ -225,7 +225,7 @@ app.post("/writeFile", (req, res, next) => {
     fs.writeFileSync(
       path.resolve(
         __dirname,
-        `./client/src/filesToParse/${req.body.directory}/${req.body.file}`
+        `./client/src/${req.body.directory}/${req.body.file}`
       ),
       req.body.text,
       { encoding: "utf8", flag: "w" }
@@ -253,10 +253,10 @@ app.post("/renameFile", (req, res, next) => {
 
   if (req.body.newFileName.length > 0 && req.body.directory.length > 0) {
     fs.rename(
-      path.resolve(__dirname, `./client/src/filesToParse/${req.body.file}`),
+      path.resolve(__dirname, `./client/src/${req.body.file}`),
       path.resolve(
         __dirname,
-        `./client/src/filesToParse/${req.body.newFileName}`
+        `./client/src/${req.body.newFileName}`
       ),
       (res) => {
         console.log(res);
@@ -268,11 +268,11 @@ app.post("/renameFile", (req, res, next) => {
     fs.rename(
       path.resolve(
         __dirname,
-        `./client/src/filesToParse/${req.body.directory}/${req.body.file}`
+        `./client/src/${req.body.directory}/${req.body.file}`
       ),
       path.resolve(
         __dirname,
-        `./client/src/filesToParse/${req.body.directory}/${req.body.newFileName}`
+        `./client/src/${req.body.directory}/${req.body.newFileName}`
       ),
       (res) => {
         console.log(res);
@@ -297,7 +297,7 @@ app.post("/deleteFile", (req, res, next) => {
       fs.unlink(
         path.resolve(
           __dirname,
-          `./client/src/filesToParse/${req.body.directory}/${req.body.fileToDelete}`
+          `./client/src/${req.body.directory}/${req.body.fileToDelete}`
         ),
         (res) => console.log(res)
       );
@@ -305,7 +305,7 @@ app.post("/deleteFile", (req, res, next) => {
       fs.unlink(
         path.resolve(
           __dirname,
-          `./client/src/filesToParse/${req.body.fileToDelete}`
+          `./client/src/${req.body.fileToDelete}`
         ),
         (res) => console.log(res)
       );
@@ -338,7 +338,7 @@ app.post("/createFile", (req, res, next) => {
     fs.appendFile(
       path.resolve(
         __dirname,
-        `./client/src/filesToParse/${req.body.newCreatedFileName}`
+        `./client/src/${req.body.newCreatedFileName}`
       ),
       "new File",
       (res) => {
@@ -350,7 +350,7 @@ app.post("/createFile", (req, res, next) => {
     fs.appendFile(
       path.resolve(
         __dirname,
-        `./client/src/filesToParse/${req.body.directory}/${req.body.newCreatedFileName}`
+        `./client/src/${req.body.directory}/${req.body.newCreatedFileName}`
       ),
       "new File",
       (res) => {
@@ -381,14 +381,14 @@ app.post("/createDirectory", (req, res, next) => {
       !fs.existsSync(
         path.resolve(
           __dirname,
-          `./client/src/filesToParse/${req.body.directory}`
+          `./client/src/${req.body.directory}`
         )
       )
     ) {
       fs.mkdirSync(
         path.resolve(
           __dirname,
-          `./client/src/filesToParse/${req.body.directory}`
+          `./client/src/${req.body.directory}`
         )
       );
     }
@@ -417,11 +417,11 @@ app.post("/renameDirectory", (req, res, next) => {
       fs.rename(
         path.resolve(
           __dirname,
-          `./client/src/filesToParse/${req.body.oldDirName}`
+          `./client/src/${req.body.oldDirName}`
         ),
         path.resolve(
           __dirname,
-          `./client/src/filesToParse/${req.body.newDirName}`
+          `./client/src/${req.body.newDirName}`
         ),
         (res) => {
           console.log(res);
@@ -436,11 +436,11 @@ app.post("/renameDirectory", (req, res, next) => {
       fs.rename(
         path.resolve(
           __dirname,
-          `./client/src/filesToParse/${req.body.directory}/${req.body.oldDirName}`
+          `./client/src/${req.body.directory}/${req.body.oldDirName}`
         ),
         path.resolve(
           __dirname,
-          `./client/src/filesToParse/${req.body.directory}/${req.body.newDirName}`
+          `./client/src/${req.body.directory}/${req.body.newDirName}`
         ),
         (res) => {
           console.log(res);
@@ -474,7 +474,7 @@ app.post("/deleteDirectory", (req, res, next) => {
     fs.rmdir(
       path.resolve(
         __dirname,
-        `./client/src/filesToParse/${req.body.directory}`
+        `./client/src/${req.body.directory}`
       ),
       { recursive: true },
       (err) => {
