@@ -260,7 +260,7 @@ console.log(typeof(thing))
 
 const createDirectory = () => {
 
-  let theDirectory = prompt('Please enter new directory name: '); 
+  let theDirectory = prompt('Please enter new folder name: '); 
 
   if (theDirectory==null){console.log("canceled"); return;}
 
@@ -407,8 +407,6 @@ const deleteDirectory = () => {
         {/* <textarea  value = {textFromFile} onChange={(e) => {changeTextFromFile(e.target.value)}}></textarea> */}
 {/* <form action=""></form>
         <input type="text" onSubmit={(e)=> {console.log(e)}}/>  */}
-
-
 
     <form>
 

@@ -79,7 +79,6 @@ app.get("/getFiles", (req, res) => {
 
           filesAndTimes.push(theObject);
         });
-
         console.log(filesAndTimes);
         console.log("Sent list of files");
         res.json(filesAndTimes);
