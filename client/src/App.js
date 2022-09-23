@@ -6,7 +6,9 @@ import FileManager from './FileManager';
 function App() {
   
   return (
-    <div className="App"><h2 id = "title">React File Self Editor, lol</h2>
+    <div className="App">
+<h2 id = "title">React File Self Editor, lol</h2>
+
     <FileManager></FileManager>
     </div>
   );

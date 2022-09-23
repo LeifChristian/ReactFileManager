@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import './App.css';
 
+import centericon from './centericon.PNG'
+import lefticon from './lefticon.PNG'
+
 const customStyles = {
   content: {
     top: '50%',
@@ -32,6 +35,7 @@ export default function FileManager() {
     const [directoryModal, setDirectoryModal] = useState(false);
     const [directoryName, setDirectoryName] = useState('');
     const [oldDirName, setOldDirName] = useState('');
+    const [leftAlign, setLeftAlign]= useState('center')
 
 // console.log(REACT_APP_MY_ENV, 'env')
 
@@ -331,7 +335,8 @@ const deleteDirectory = () => {
 }
 
     useEffect(() => {
-      console.log('spawn')
+      console.log('spawn');
+
       // if(!passwordEntered){
       //   let password = prompt('Please enter password'); 
       //   if(password!==process.env.REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
@@ -377,9 +382,20 @@ const deleteDirectory = () => {
         style={customStyles}
         contentLabel="Example Modal"
       ><div id = "modalText">
-        
+
         <h3 style={{marginLeft: 'auto', marginRight: 'auto', textAlign:"center", marginTop: '-.9%', marginBottom: "-2%"}}>{currentFile.Name}</h3>
-        <textarea  value = {textFromFile} onChange={(e) => {changeTextFromFile(e.target.value)}}></textarea>
+
+        <div>      { leftAlign=="left" ?
+
+          <button onClick={()=>{setLeftAlign('center')}}>    <img src={lefticon} style={{height: '22px'}} alt="Logo" /></button>  :
+
+          
+          <button onClick={()=>{setLeftAlign('left')}}> <img src={centericon} style={{height: '22px'}} alt="Logo" /></button> }
+     
+      
+      </div>
+        
+        <textarea  style={{ textAlign: `${leftAlign}`}} value = {textFromFile} onChange={(e) => {changeTextFromFile(e.target.value)}}></textarea>
 
       <br></br>
 
