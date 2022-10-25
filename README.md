@@ -16,6 +16,7 @@ Clicking on a file will open an editor where you can:
  3. Delete a file
 
  The + button creates a new file.
+ The ** button creates a new directory.
  
  That's pretty much it! 
 
