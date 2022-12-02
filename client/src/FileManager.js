@@ -163,6 +163,8 @@ export default function FileManager() {
     let dateString = current.toString();
 
     let newCreatedFileName = prompt("Please enter file name");
+    
+    if(!newCreatedFileName){return;}
 
     var data = JSON.stringify({
       newCreatedFileName: newCreatedFileName,
