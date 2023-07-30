@@ -330,19 +330,21 @@ const deleteDirectory = () => {
 
 }
 
+
+
     useEffect(() => {
       console.log('spawn')
-      // if(!passwordEntered){
-      //   let password = prompt('Please enter password'); 
-      //   if(password!==process.env.REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
-      //   setPasswordEntered(true);
-      // }
+      if(!passwordEntered){
+        let password = prompt('Please enter password'); 
+        if(password!==process.env.REACT_APP_MY_ENV){setTrigger(prevState=> !prevState); return;}
+        setPasswordEntered(true);
+      }
 
        // front end password is disabled for development. re-enable to use front end password protect with .env
 
       // to enable password, comment out duplicate line below: 'setPasswordEntered(true)'
 
-      setPasswordEntered(true)
+      // setPasswordEntered(true)
 
     axios.get(`/getFiles?string=${process.env.REACT_APP_API_SECRET}&folder=${directory}`).then((res) =>{ 
       // console.log(res.data, " --axios response"); 
