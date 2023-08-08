@@ -250,7 +250,7 @@ app.post("/renameFile", (req, res, next) => {
   console.log("rename route");
   res.send("rename route response");
 
-  if (req.body.newFileName.length > 0 && req.body.directory.length > 0) {
+  if (req.body.newFileName.length > 0 && req.body.directory.length == 0) {
     fs.rename(
       path.resolve(__dirname, `./client/src/filesToParse/${req.body.file}`),
       path.resolve(
